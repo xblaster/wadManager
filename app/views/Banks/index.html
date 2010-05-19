@@ -1,0 +1,34 @@
+#{extends 'default.html' /}
+
+
+<ul>
+#{list items:bankAccountList, as:'bankAccount'}
+	<li><a href="@{show(bankAccount.id)}"> ${bankAccount.name}</a>
+		<a id="${bankAccount.id}-delete">[X]</a>
+		<script>
+			$('#${bankAccount.id}-delete').click(function() {
+					$.post('@{delete(bankAccount.id)}', function() {
+						location.reload();
+					})
+			})
+		</script>
+	</li>
+#{/list}
+</ul>
+
+<div id="addBankDiv" style="display:none">
+	<form action="@{add()}" method="POST">
+	    <label for="name">Name of you account</label>
+	    <input type="text" name="name" id="name" value="" />
+	    <input type="submit" value="Add" />
+	</form>
+</div>
+
+<div>
+	<a href="#" id="addBankBtn">Add</a>
+</div>
+<script>
+	$('#addBankBtn').click(function() {
+		$('#addBankDiv').fadeIn();
+	})
+</script>

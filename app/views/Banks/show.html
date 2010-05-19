@@ -1,0 +1,24 @@
+#{extends 'default.html' /}
+
+<h2><a href="@{index()}">Manage account</a> &gt; ${bankAccount.name}</h2>
+
+<div>
+	<form action="@{addOperation()}" method="POST">
+	
+	<p>
+	    <label for="name">Name of your operation</label><br/>
+	    <input type="text" name="name" id="name" value="" />
+	</p>
+	<p> 
+	    <label for="name">Date of your operation</label><br/>
+	    <input class="date" type="text" name="date" id="date" value="" />
+	 </p>
+	 <p>
+	    <label for="name">Amount of your operation</label><br/>
+	    <input type="text" name="amount" id="amount" value="" /> &euro;
+	 </p>
+	 <p>   
+	    <input type="submit" value="Add" />
+	  </p>
+	</form>
+</div>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>#{get 'title' /} - wadManager</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <link rel="stylesheet" type="text/css" media="screen" href="@{'/public/stylesheets/blueprint/screen.css'}">
+        <link rel="stylesheet" type="text/css" media="screen" href="@{'/public/stylesheets/lo2k.css'}">
+        <link rel="stylesheet" type="text/css" media="screen" href="@{'/public/stylesheets/ui-darkness/jquery-ui-1.8.1.custom.css'}">
+        
+        #{get 'moreStyles' /}
+        <link rel="shortcut icon" type="image/png" href="@{'/public/images/favicon.png'}">
+        <script src="@{'/public/javascripts/jquery-1.4.2.min.js'}" type="text/javascript" charset="utf-8"></script>
+        <script src="@{'/public/javascripts/jquery-ui-1.8.1.custom.min.js'}" type="text/javascript" charset="utf-8"></script>
+        
+        #{get 'moreScripts' /}
+    </head>
+    <body>
+    	<div class="container">
+    	<h1>WadManager</h1>
+
+	
+		#{if authenticated}
+			<div class="span-24 last" style="text-align:right">
+				<a href="@{Login.disconnect()}">Disconnect</a>
+			</div>
+		#{/if}
+    	
+    	#{if flash.success}
+    		<p class="success">${flash.success}</p>
+		#{/if}
+		
+		#{if flash.error}
+    		<p class="error">${flash.error}</p>
+		#{/if}
+    	 
+        #{doLayout /}
+        </div>
+        
+        
+        <script>
+        	$.datepicker.setDefaults($.datepicker.regional['fr']);
+        	$('.date').datepicker();
+        </script>
+        
+    </body>
+</html>

@@ -1,0 +1,12 @@
+#{extends 'default.html' /}
+
+ 
+<h2>Authentification</h2> 
+
+<form action="@{Login.authenticate()}" method="POST">
+    <label for="user">Can we use your google account ?</label>
+    <input type="hidden" name="user" id="user" value="http://www.google.com/accounts/o8/id" />
+    <input type="submit" value="Yes" />
+    <a href="@{Login.refuse()}">No</a>
+</form>
+</code>
