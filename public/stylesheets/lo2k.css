@@ -1,0 +1,32 @@
+body, html {
+	background-color: #333;
+}
+
+.container {
+	background-color: #FFF;
+	padding: 3em;
+}
+
+h1 {
+	text-shadow: 1px 1px 5px #BBB;
+}
+
+.accountTab thead {
+	background-color: #333;
+	color: #FFF;
+}
+
+.accountTab {
+	border:1px solid #888;
+}
+
+.accountTab td {
+	border-bottom:1px solid #CCC;
+	border-right:1px solid #CCC;
+}
+
+.operationTag {
+	color: #FFF;
+	-moz-border-radiux:2px;
+	devkit-border-radiux:4px;
+}

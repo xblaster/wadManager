@@ -1,6 +1,8 @@
 #{extends 'default.html' /}
 
 
+<h2>Account list</h2>
+
 <ul>
 #{list items:bankAccountList, as:'bankAccount'}
 	<li><a href="@{show(bankAccount.id)}"> ${bankAccount.name}</a>

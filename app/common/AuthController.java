@@ -1,5 +1,7 @@
 package common;
 
+import models.Tag;
+import controllers.Application;
 import controllers.Login;
 import play.libs.OpenID;
 import play.libs.OpenID.UserInfo;
@@ -15,6 +17,12 @@ public class AuthController extends Controller {
 	    } else {
 	    	renderArgs.put("authenticated",true);
 	    }
+	}
+	
+	@Before
+	static void populate() {
+		renderArgs.put("user", Application.getAuthUser());
+		renderArgs.put("tags", Tag.findAll());
 	}
 	 
 

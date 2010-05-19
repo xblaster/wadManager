@@ -12,7 +12,11 @@ public class Application extends AuthController {
     }
 
     public static User getAuthUser() {
-    	return User.find("id = ?",Long.valueOf(session.get("userid"))).first();
+    	if (session.contains("userid")) {
+    			return User.find("id = ?",Long.valueOf(session.get("userid"))).first();
+    	} else {
+    		return null;
+    	}
     }
     
 }

@@ -2,23 +2,91 @@
 
 <h2><a href="@{index()}">Manage account</a> &gt; ${bankAccount.name}</h2>
 
-<div>
+
+<table class="accountTab">
+<thead>
+	<td>Date</td>
+	<td>Operation name</td>
+	<td>Operation amount</td>
+	<td>Action</td>
+</thead>
+#{list items:operations, as:'operation'}
+	<tr>
+	<td>${operation.date}</td>
+	<td>
+		${operation.name}
+		#{list items:operation.tags, as:'tag'}
+			<span style="background-color: ${tag.color}" class="operationTag">${tag.name}</span>
+		#{/list}
+	</td>
+		
+	<td style="text-align:right">
+		#{if operation.amount < 0}
+			<span style="color: #F00">${operation.amount}</span>
+		#{/if} 
+		#{else}
+			${operation.amount}
+		#{/else}
+			</td>	
+	<td>
+		<a id="${operation.id}-delete">[X]</a>
+		<script>
+			$('#${operation.id}-delete').click(function() {
+					$.post('@{deleteOperation(operation.id)}', function() {
+						location.reload();
+					})
+			})
+		</script>	
+	
+	</td>
+		
+		
+	</tr>
+#{/list}
+
+	<tr>
+		<td>
+		</td>
+		<td>
+			<strong>Total</strong>
+		</td>
+		
+		<td style="text-align:right">
+			${somme}
+		</td>
+		<td>
+		</td>
+	</tr>
+
+</table>
+
+
+<div class="span-24 last">
 	<form action="@{addOperation()}" method="POST">
 	
-	<p>
-	    <label for="name">Name of your operation</label><br/>
-	    <input type="text" name="name" id="name" value="" />
-	</p>
+	<div class="span-5 colborder">
+		<p>
+		    <label for="name">Name of your operation</label><br/>
+		    <input type="text" name="name" id="name" value="" />
+		</p>
+	</div>
+	<div class="span-5 colborder">
 	<p> 
 	    <label for="name">Date of your operation</label><br/>
 	    <input class="date" type="text" name="date" id="date" value="" />
 	 </p>
+	 </div>
+	 <div class="span-5 colborder">
 	 <p>
 	    <label for="name">Amount of your operation</label><br/>
 	    <input type="text" name="amount" id="amount" value="" /> &euro;
 	 </p>
+	 </div>
+	 <div class="span-5">
 	 <p>   
+	    <input type="hidden" name="bankId" id="bankId" value="${bankAccount.id}" />
 	    <input type="submit" value="Add" />
 	  </p>
+	  </div>
 	</form>
 </div>
