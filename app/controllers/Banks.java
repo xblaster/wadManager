@@ -3,6 +3,11 @@ package controllers;
 import java.util.Date;
 import java.util.List;
 
+import javax.inject.Inject;
+
+import services.BankAccountService;
+import services.BankAccountServiceImpl;
+
 import models.BankAccount;
 import models.Operation;
 import models.User;
@@ -10,6 +15,9 @@ import models.User;
 import common.AuthController;
 
 public class Banks extends AuthController{
+	
+	@Inject	static BankAccountService bankAccountService;
+	
 	public static void index() {
 		User u = Application.getAuthUser();
 		List<BankAccount> bankAccountList = BankAccount.find("byUser",u).fetch();
@@ -40,13 +48,8 @@ public class Banks extends AuthController{
 	 * @param name
 	 */
 	public static void delete(Long id) {
-		User u = Application.getAuthUser();
-		//@TODO verify he have rights to do what
-		
-		BankAccount bankAccount = BankAccount.findById(id);
-		flash.success("Account %s deleted", bankAccount.name);
-		bankAccount.delete();
-		
+		bankAccountService.delete(id);
+		//flash.success("Account %s deleted", bankAccount.name);
 	}
 	
 	/**
@@ -54,13 +57,8 @@ public class Banks extends AuthController{
 	 * @param name
 	 */
 	public static void deleteOperation(Long id) {
-		User u = Application.getAuthUser();
-		//@TODO verify he have rights to do what
-		
-		Operation operation = Operation.findById(id);
-		flash.success("Operation %s deleted", operation.name);
-		operation.delete();
-		
+		flash.success("Operation %s deleted", bankAccountService.getOperationById(id).name);
+		bankAccountService.deleteOperation(id);
 	}
 	
 	public static void addOperation(String name, Date date, Double amount, Long bankId) {
@@ -72,7 +70,7 @@ public class Banks extends AuthController{
 		
 		operation.bankAccount = BankAccount.findById(bankId);
 		
-		operation.save();
+		bankAccountService.saveOperation(operation);
 		
 		flash.success("Operation %s created", name);
 		
@@ -84,7 +82,8 @@ public class Banks extends AuthController{
 		BankAccount bankAccount = new BankAccount();
 		bankAccount.name = name;
 		bankAccount.user= u;
-		bankAccount.save();
+		
+		bankAccountService.save(bankAccount);
 		
 		flash.success("Account %s created", name);
 		

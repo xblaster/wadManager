@@ -27,6 +27,8 @@ h1 {
 
 .operationTag {
 	color: #FFF;
-	-moz-border-radiux:2px;
-	devkit-border-radiux:4px;
+	-moz-border-radius:3px;
+	-webkit-border-radius:3px;
+	padding-left: 3px;
+	padding-right: 3px;
 }
