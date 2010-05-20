@@ -1,0 +1,33 @@
+<h2>Tags list</h2>
+
+#{list items:_tags, as:'tag'}
+	<div class="operationTag" style="background-color: ${tag.color}"><span id="tag-span-${tag.id}">${tag.name}</span>
+	#{if _as == 'editor'}
+	
+		<!-- <a id="tag-colbtn-${tag.id}" href="#">c</a>
+		<script>
+			$('#tag-colbtn-${tag.id}').ColorPicker({
+				color: '${tag.color}',
+				onHide: function(colpkr) {
+					$('#tag-colbtn-${tag.id}').html(colpkr.rgb);		
+				}	 
+			})
+		</script> -->
+		<a id="tag-delbtn-${tag.id}" href="#">[X]</a>
+	#{/if}
+	</div>
+	
+		#{if _as == 'editor'}
+		    <script>
+				 $('#tag-span-${tag.id}').editable('@{TagCtrl.edit}', { 
+						 submitdata : { tagid : ${tag.id}}
+				 });
+
+				 $('#tag-delbtn-${tag.id}').click('@{TagCtrl.edit}', function() {
+					 location.reload();
+			 	 });
+			</script>
+	    #{/if}
+	
+	
+#{/list}

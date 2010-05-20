@@ -1,7 +1,10 @@
 package services;
 
+import java.util.List;
+
 import models.BankAccount;
 import models.Operation;
+import models.Tag;
 import models.User;
 import controllers.Application;
 
@@ -33,6 +36,11 @@ public class BankAccountServiceImpl implements BankAccountService {
 
 	public void saveOperation(Operation op) {
 		op.save();
+	}
+
+	@Override
+	public List<Tag> getAllTags() {
+		return Tag.findAll();
 	}
 	
 	

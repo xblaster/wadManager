@@ -1,8 +1,10 @@
 #{extends 'default.html' /}
 
 
-<h2>Account list</h2>
 
+
+<div class="span-11 colborder">
+<h2>Account list</h2>
 <ul>
 #{list items:bankAccountList, as:'bankAccount'}
 	<li><a href="@{show(bankAccount.id)}"> ${bankAccount.name}</a>
@@ -34,3 +36,12 @@
 		$('#addBankDiv').fadeIn();
 	})
 </script>
+
+</div>
+<div class="span-12 last">
+	#{tagsList tags:tags, as:'editor' /}
+</div>
+
+
+
+

@@ -22,7 +22,11 @@ public class Banks extends AuthController{
 		User u = Application.getAuthUser();
 		List<BankAccount> bankAccountList = BankAccount.find("byUser",u).fetch();
 		//List<BankAccount> bankAccountList = u.bankAccountList;
-		render(bankAccountList);
+		
+		renderArgs.put("tags", bankAccountService.getAllTags());
+		renderArgs.put("bankAccountList", bankAccountList);
+		
+		render();
 	}
 	
 	public static void show(Long id) {

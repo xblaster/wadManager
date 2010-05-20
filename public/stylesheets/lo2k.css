@@ -31,4 +31,9 @@ h1 {
 	-webkit-border-radius:3px;
 	padding-left: 3px;
 	padding-right: 3px;
+	display: inline;
+}
+
+.operationTag a {
+	color: #FFF;
 }
