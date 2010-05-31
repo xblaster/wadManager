@@ -65,6 +65,8 @@ public class Login extends AuthController {
 			u.language = verifiedUser.extensions.get("language");
 			u.save();
 			
+			session.put("userid", u.id);
+			
 			flash.success("account for %s has been created",u.firstname);
 			Application.index();
 		}

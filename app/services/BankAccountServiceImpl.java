@@ -38,7 +38,6 @@ public class BankAccountServiceImpl implements BankAccountService {
 		op.save();
 	}
 
-	@Override
 	public List<Tag> getAllTags() {
 		return Tag.findAll();
 	}

@@ -25,7 +25,8 @@ public class BankAccount extends Model {
 	}
 	
 	public String toString() {
-		return user.firstname+":"+name;
+		String firstName = (user!=null?user.firstname:"");
+		return firstName+":"+name;
 	}
 	
 	@OneToMany(fetch = FetchType.EAGER)
