@@ -1,10 +1,13 @@
 import injection.WadGuiceModule;
 
+import java.util.Date;
 import java.util.List;
 
 import models.BankAccount;
+import models.Operation;
 import models.User;
 
+import org.apache.commons.lang.time.DateUtils;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -73,6 +76,38 @@ public class ServiceTest extends UnitTest{
 		
 		List<BankAccount> blist = uService.getAllBankAccountsForUser(u);
 		assertEquals(2, blist.size());
+	}
+	
+	@Test
+	public void operationExistsTest() {
+			User u = fetchOnTheFlyCreatedUser();
+		
+		BankAccount bAccount = new BankAccount();
+		bAccount.user = u;
+		bAccount.name = "bank1";
+		
+		bService.save(bAccount);
+		
+		Operation op = new Operation();
+		op.name = "test";
+		op.amount = 234;
+		op.date = new Date();
+		op.bankAccount = bAccount;
+		
+		bService.saveOperation(op);
+		
+		assertEquals(true, bService.operationExists(op));
+		
+		Operation op2 = new Operation();
+		op2.name = "test";
+		op2.amount = 7879;
+		op2.date = new Date();
+		op2.bankAccount = bAccount;
+		
+		//we don't save it
+		
+		assertEquals(false, bService.operationExists(op2));
+		
 	}
 
 }

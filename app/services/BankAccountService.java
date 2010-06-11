@@ -25,4 +25,6 @@ public interface BankAccountService {
 	
 	public Operation getOperationById(Long id);
 	
+	public boolean operationExists(Operation op);
+	
 }

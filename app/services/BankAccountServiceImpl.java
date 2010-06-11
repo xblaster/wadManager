@@ -41,6 +41,17 @@ public class BankAccountServiceImpl implements BankAccountService {
 	public List<BankAccount> getByUser(User u) {
 		return BankAccount.find("byUser", u).fetch();
 	}
+
+	@Override
+	public boolean operationExists(Operation op) {
+		long size = Operation.count("amount = ? and date = ?", op.amount, op.date);
+		
+		if (size ==0) {
+			return false;
+		}
+		
+		return true;
+	}
 	
 	
 }
