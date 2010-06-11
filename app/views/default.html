@@ -26,7 +26,7 @@
 	
 		#{if authenticated}
 			<div class="span-24 last" style="text-align:right">
-				<a href="@{Login.disconnect()}">Disconnect</a>
+				${user} <a href="@{Login.disconnect()}">Disconnect</a>
 			</div>
 		#{/if}
     	

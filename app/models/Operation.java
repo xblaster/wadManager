@@ -1,8 +1,10 @@
 package models;
 
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -24,6 +26,11 @@ public class Operation extends Model {
 		return bankAccount+":"+name+"|"+amount;
 	}
 	
-	@OneToMany
-	public List<Tag> tags;
+	@OneToMany(cascade= CascadeType.PERSIST)
+	public Set<Tag> tags;
+	
+	public Operation() {
+		super();
+		tags = new TreeSet<Tag>();
+	}
 }

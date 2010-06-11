@@ -14,10 +14,11 @@ import javax.inject.Inject;
 
 import models.BankAccount;
 import models.Operation;
+import models.Tag;
 import models.User;
 import services.BankAccountService;
+import services.TagService;
 import services.UserService;
-import sun.swing.BakedArrayList;
 
 import common.AuthController;
 
@@ -25,6 +26,7 @@ public class Banks extends AuthController{
 	
 	@Inject	static BankAccountService bankAccountService;
 	@Inject	static UserService userService;
+	@Inject	static TagService tagService;
 	
 	public static void index() {
 		User u = Application.getAuthUser();
@@ -142,8 +144,29 @@ public class Banks extends AuthController{
 				}
 				
 				op.bankAccount = bAccount;
-				
-				bankAccountService.saveOperation(op);
+				if (!bankAccountService.operationExists(op)) {
+					
+					//bankAccountService.saveOperation(op);
+					
+					if (op.name.contains("CARTE")) {
+						op.tags.add(tagService.getOrCreateByName("Carte"));
+					}
+					
+					/*
+					if (op.name.contains("DAB")) {
+						op.tags.add(tagService.getOrCreateByName("DAB"));
+					}
+					
+					if (op.name.contains("PRELEVEMENT")) {
+						Tag t = tagService.getOrCreateByName("PRELEVEMENT");
+						op.tags.add(t);
+					}*/
+					
+					op.save();
+					
+					//bankAccountService.saveOperation(op);
+					
+				}
 				
 			}
 		} catch (IOException e) {
