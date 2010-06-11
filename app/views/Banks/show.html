@@ -12,7 +12,7 @@
 </thead>
 #{list items:operations, as:'operation'}
 	<tr>
-	<td>${operation.date}</td>
+	<td>${operation.date.format("dd/MM/yyyy")} <em>(${operation.date.since()})</em></td>
 	<td>
 		${operation.name}
 		#{list items:operation.tags, as:'tag'}
@@ -88,5 +88,14 @@
 	    <input type="submit" value="Add" />
 	  </p>
 	  </div>
+	</form>
+</div>
+
+
+<div class="span-24 last">
+	<form action="@{importBNPCSV()}" enctype="multipart/form-data" method="post">
+		<input type="hidden" name="bankId" id="bankId" value="${bankAccount.id}" />
+		<input type="file" name="importFile">
+		<input type="submit" value="Import" />
 	</form>
 </div>

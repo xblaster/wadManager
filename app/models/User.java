@@ -18,7 +18,10 @@ public class User extends Model{
 	
 	@OrderBy("name ASC")
 	@OneToMany
-	public List<BankAccount> bankAccountList;
+	public List<BankAccount> bankAccounts;
+	
+	@OneToMany
+	public List<Tag> tags;
 	
 	public String toString() {
 		return this.firstname;

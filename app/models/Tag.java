@@ -1,6 +1,7 @@
 package models;
 
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 
 import play.db.jpa.Model;
 
@@ -12,4 +13,7 @@ public class Tag extends Model{
 	public String toString() {
 		return name;
 	}
+	
+	@ManyToOne
+	public User user;
 }

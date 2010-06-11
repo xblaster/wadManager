@@ -38,8 +38,8 @@ public class BankAccountServiceImpl implements BankAccountService {
 		op.save();
 	}
 
-	public List<Tag> getAllTags() {
-		return Tag.findAll();
+	public List<BankAccount> getByUser(User u) {
+		return BankAccount.find("byUser", u).fetch();
 	}
 	
 	
