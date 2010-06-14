@@ -4,7 +4,6 @@ import java.util.List;
 
 import models.BankAccount;
 import models.Operation;
-import models.Tag;
 import models.User;
 import controllers.Application;
 
@@ -51,6 +50,12 @@ public class BankAccountServiceImpl implements BankAccountService {
 		}
 		
 		return true;
+	}
+
+	public BankAccount getByOperation(Operation op) {
+		//BankAccount ba =  BankAccount.find("byOperation", op).first();
+		BankAccount ba = BankAccount.findById(op.bankAccount.getId());
+		return ba;
 	}
 	
 	

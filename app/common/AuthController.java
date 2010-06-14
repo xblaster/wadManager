@@ -17,6 +17,10 @@ public class AuthController extends Controller {
 	    } else {
 	    	renderArgs.put("authenticated",true);
 	    }
+	    
+	    if (Application.getAuthUser()==null) {
+	    	Login.login();
+	    }
 	}
 	
 	@Before

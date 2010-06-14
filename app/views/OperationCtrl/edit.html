@@ -4,6 +4,10 @@
 #{form @save()}
 
 
+#{field 'operation.id'}
+<input type="hidden" id="${field.id}" name="${field.name}" value="${field.value}">
+#{/}
+
 #{field 'operation.name'}
 <p>
   <label>&{field.name}</label>
@@ -22,8 +26,11 @@
 
 <h3>Tags</h3>
 
-#{list operation.tags, as:'tag'}
-	<input type="checkbox">${tag.name}</input> 
+#{list tags, as:'tag'}
+	<input type="checkbox" name="tag" value="${tag.id}"
+	 #{if operation.tags.contains(tag)}
+	 	checked
+	 #{/if}/> ${tag.name}
 #{/list}
 
 <br/>

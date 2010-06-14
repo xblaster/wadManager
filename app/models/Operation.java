@@ -33,12 +33,4 @@ public class Operation extends Model {
 		super();
 		tags = new TreeSet<Tag>();
 	}
-	
-	/*public Operation save() {
-		for (Tag t : tags) {
-			t.save();
-		}
-		
-		return super.save();
-	}*/
 }

@@ -4,7 +4,6 @@ import java.util.List;
 
 import models.BankAccount;
 import models.Operation;
-import models.Tag;
 import models.User;
 
 public interface BankAccountService {
@@ -14,6 +13,8 @@ public interface BankAccountService {
 	public BankAccount getById(Long id);
 	
 	public List<BankAccount> getByUser(User u);
+	
+	public BankAccount getByOperation(Operation op);
 	
 	
 	/**
