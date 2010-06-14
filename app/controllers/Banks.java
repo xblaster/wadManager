@@ -127,8 +127,6 @@ public class Banks extends AuthController{
 			{
 				String[] res = line.split("\t");
 				
-				System.out.println(res[2]);
-				
 				//create operation
 				Operation op = new Operation();
 				res[2] = res[2].replace(",", ".");
@@ -149,10 +147,10 @@ public class Banks extends AuthController{
 					//bankAccountService.saveOperation(op);
 					
 					if (op.name.contains("CARTE")) {
-						op.tags.add(tagService.getOrCreateByName("Carte"));
+						op.tags.add(tagService.getOrCreateByName("CB"));
 					}
 					
-					/*
+					
 					if (op.name.contains("DAB")) {
 						op.tags.add(tagService.getOrCreateByName("DAB"));
 					}
@@ -160,11 +158,11 @@ public class Banks extends AuthController{
 					if (op.name.contains("PRELEVEMENT")) {
 						Tag t = tagService.getOrCreateByName("PRELEVEMENT");
 						op.tags.add(t);
-					}*/
+					}
 					
-					op.save();
+					//op.save();
 					
-					//bankAccountService.saveOperation(op);
+					bankAccountService.saveOperation(op);
 					
 				}
 				

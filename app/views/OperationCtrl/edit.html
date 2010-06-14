@@ -1,0 +1,33 @@
+#{extends 'default.html' /}
+#{set title:'Home' /}
+
+#{form @save()}
+
+
+#{field 'operation.name'}
+<p>
+  <label>&{field.name}</label>
+  <input type="text" id="${field.id}" name="${field.name}" value="${field.value}" class="${field.errorClass}" size="100">
+  <span class="error">${field.error}</span>
+</p>
+#{/}
+
+#{field 'operation.amount'}
+<p>
+  <label>&{field.name}</label>
+  <input type="text" id="${field.id}" name="${field.name}" value="${field.value}" class="${field.errorClass}">
+  <span class="error">${field.error}</span>
+</p>
+#{/}
+
+<h3>Tags</h3>
+
+#{list operation.tags, as:'tag'}
+	<input type="checkbox">${tag.name}</input> 
+#{/list}
+
+<br/>
+
+<input type="submit" value="save"/>
+
+#{/form}

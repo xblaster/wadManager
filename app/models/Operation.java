@@ -6,8 +6,8 @@ import java.util.TreeSet;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 
 import play.db.jpa.Model;
 
@@ -26,11 +26,19 @@ public class Operation extends Model {
 		return bankAccount+":"+name+"|"+amount;
 	}
 	
-	@OneToMany(cascade= CascadeType.PERSIST)
+	@ManyToMany(cascade= CascadeType.PERSIST)
 	public Set<Tag> tags;
 	
 	public Operation() {
 		super();
 		tags = new TreeSet<Tag>();
 	}
+	
+	/*public Operation save() {
+		for (Tag t : tags) {
+			t.save();
+		}
+		
+		return super.save();
+	}*/
 }

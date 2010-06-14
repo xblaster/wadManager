@@ -5,14 +5,15 @@ import java.util.List;
 
 import models.BankAccount;
 import models.Operation;
+import models.Tag;
 import models.User;
 
-import org.apache.commons.lang.time.DateUtils;
 import org.junit.Before;
 import org.junit.Test;
 
 import play.test.UnitTest;
 import services.BankAccountService;
+import services.TagService;
 import services.UserService;
 
 import com.google.inject.Guice;
@@ -24,6 +25,7 @@ public class ServiceTest extends UnitTest{
 	private static Injector injector = Guice.createInjector(new WadGuiceModule());
 	private BankAccountService bService;
 	private UserService uService;
+	private TagService tService;
 	
 	/**
 	 * create a user on the fly
@@ -43,6 +45,7 @@ public class ServiceTest extends UnitTest{
 	public void setUp() {
 		 bService = injector.getInstance(BankAccountService.class);
 		 uService = injector.getInstance(UserService.class);
+		 tService = injector.getInstance(TagService.class);
 	}
 	
 	@Test
@@ -80,7 +83,7 @@ public class ServiceTest extends UnitTest{
 	
 	@Test
 	public void operationExistsTest() {
-			User u = fetchOnTheFlyCreatedUser();
+		User u = fetchOnTheFlyCreatedUser();
 		
 		BankAccount bAccount = new BankAccount();
 		bAccount.user = u;
@@ -110,4 +113,29 @@ public class ServiceTest extends UnitTest{
 		
 	}
 
+	@Test
+	public void tagAddTest() {
+		User u = fetchOnTheFlyCreatedUser();
+		
+		BankAccount bAccount = new BankAccount();
+		bAccount.user = u;
+		bAccount.name = "bankAddTest";
+		
+		bService.save(bAccount);
+		
+		Operation op = new Operation();
+		op.name = "test";
+		op.amount = 234;
+		op.date = new Date();
+		op.bankAccount = bAccount;
+		
+		bService.saveOperation(op);
+		
+		Tag t = tService.getOrCreateByName("test1");
+		
+		System.out.println("**** TAG ***"+t.getId());
+		
+		op.tags.add(t);
+		op.save();
+	}
 }

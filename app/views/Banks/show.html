@@ -14,10 +14,12 @@
 	<tr>
 	<td>${operation.date.format("dd/MM/yyyy")} <em>(${operation.date.since()})</em></td>
 	<td>
-		${operation.name}
 		#{list items:operation.tags, as:'tag'}
 			<span style="background-color: ${tag.color}" class="operationTag">${tag.name}</span>
 		#{/list}
+		${operation.name}
+		
+		<a href="@{OperationCtrl.edit(operation.id)}">edit</a>
 	</td>
 		
 	<td style="text-align:right">
