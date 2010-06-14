@@ -3,15 +3,21 @@
 <h2><a href="@{index()}">Manage account</a> &gt; ${bankAccount.name}</h2>
 
 
+#{form @save()}
+
 <table class="accountTab">
 <thead>
+	<td></td>
 	<td>Date</td>
 	<td>Operation name</td>
 	<td>Operation amount</td>
 	<td>Action</td>
 </thead>
+
+
 #{list items:operations, as:'operation'}
 	<tr>
+	<td><input type="checkbox" name="selected" value="${operation.id}"/></td>
 	<td>${operation.date.format("dd/MM/yyyy")} <em>(${operation.date.since()})</em></td>
 	<td>
 		#{list items:operation.tags, as:'tag'}
@@ -62,6 +68,8 @@
 
 </table>
 
+<input type="submit" value="mass"/>
+#{/form}
 
 <div class="span-24 last">
 	<form action="@{addOperation()}" method="POST">
@@ -101,3 +109,14 @@
 		<input type="submit" value="Import" />
 	</form>
 </div>
+
+<script>
+	$(':checkbox').change(function() {
+		//$(this).closest('tr').css('background-color', 'red');
+		if ($(this).is(':checked')) {
+				$(this).closest('tr').addClass("success");
+		} else {
+				$(this).closest('tr').removeClass("success");
+		}
+	});
+</script>

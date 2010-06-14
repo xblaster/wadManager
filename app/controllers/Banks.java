@@ -66,6 +66,16 @@ public class Banks extends AuthController{
 		//flash.success("Account %s deleted", bankAccount.name);
 	}
 	
+	public static void save(List<Long> selected) {
+		String res = "";
+		for(Long  id : selected) {
+			res+=id+"\n";
+		}
+		
+		renderText(res);
+		
+	}
+	
 	/**
 	 * 
 	 * @param name
