@@ -2,8 +2,20 @@
 
 <h2><a href="@{index()}">Manage account</a> &gt; ${bankAccount.name}</h2>
 
+<div class="span-24 last">
+	<p>
+	#{list items:tags, as:'tag'}
+		<span class="operationTag addTagBtn" style="background-color: ${tag.color}"><a onClick="" href="#">${tag.name}</a></span>
+	#{/list}
+	<br/>
+	#{list items:tags, as:'tag'}
+		<span class="operationTag delTagBtn" style="border: 1px dashed ${tag.color}"><a style="color: ${tag.color}" href="#">${tag.name}</a></span>
+	#{/list}
+	</p>
+</div>
 
-#{form @save()}
+<div class="span-24 last">
+#{form @save(), id:'selectedForm'}
 
 <table class="accountTab">
 <thead>
@@ -68,8 +80,21 @@
 
 </table>
 
-<input type="submit" value="mass"/>
 #{/form}
+</div>
+
+<div class="span-24 last">
+	<p>
+	#{list items:tags, as:'tag'}
+		<span class="operationTag addTagBtn" style="background-color: ${tag.color}"><a onClick="" href="#">${tag.name}</a></span>
+	#{/list}
+	<br/>
+	#{list items:tags, as:'tag'}
+		<span class="operationTag delTagBtn" style="border: 1px dashed ${tag.color}"><a style="color: ${tag.color}" href="#">${tag.name}</a></span>
+	#{/list}
+	</p>
+</div>
+
 
 <div class="span-24 last">
 	<form action="@{addOperation()}" method="POST">
@@ -102,6 +127,7 @@
 </div>
 
 
+
 <div class="span-24 last">
 	<form action="@{importBNPCSV()}" enctype="multipart/form-data" method="post">
 		<input type="hidden" name="bankId" id="bankId" value="${bankAccount.id}" />
@@ -119,4 +145,26 @@
 				$(this).closest('tr').removeClass("success");
 		}
 	});
+
+	function launchAction(action, param) {
+		var params = $("#selectedForm").serialize();
+		params+= "&jsAction="+ action;
+		params+= "&jsParam="+ param;
+		//params["rzerzrz"] = 3;
+		$.post("@{batch()}", params, function() {
+			window.location.reload();
+		});
+	}
+
+	$('.addTagBtn').click(function() {
+		launchAction("addTag", $(this).children('a').text());
+		return false;
+	});
+
+	$('.delTagBtn').click(function() {
+		launchAction("delTag", $(this).children('a').text());
+		return false;
+	});
+	
+	
 </script>

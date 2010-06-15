@@ -54,6 +54,8 @@ public class Banks extends AuthController{
 		
 		renderArgs.put("somme", somme);
 		
+		renderArgs.put("tags", userService.getAllTags());
+		
 		render();
 	}
 	
@@ -193,6 +195,30 @@ public class Banks extends AuthController{
 		
 		flash.success("Import successfull");
 		show(bankId);
+	}
+	
+	public static void batch(List<Long> selected, String jsAction, String jsParam) {
+		if (selected == null) {
+			return;
+		}
+		
+		for (Long l : selected) {
+			System.out.println("retrieve "+l);
+			Operation op = bankAccountService.getOperationById(l);
+			
+			if (jsAction.equals("addTag")) {
+				
+				System.out.println("change");
+				op.tags.add(tagService.getOrCreateByName(jsParam));
+				bankAccountService.saveOperation(op);
+			} else if (jsAction.equals("delTag")) {
+				op.tags.remove(tagService.getOrCreateByName(jsParam));
+				bankAccountService.saveOperation(op);
+			}
+		}
+		/*System.out.println(jsAction);
+		System.out.println(jsParam);
+		System.out.println(selected.size());*/
 	}
 	
 	
