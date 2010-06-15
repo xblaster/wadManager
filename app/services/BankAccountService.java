@@ -6,6 +6,7 @@ import java.util.List;
 
 import models.BankAccount;
 import models.Operation;
+import models.Tag;
 import models.User;
 
 public interface BankAccountService {
@@ -32,4 +33,5 @@ public interface BankAccountService {
 	
 	public boolean operationExists(Operation op);
 	
+	public BigDecimal getBudgetForTag(BankAccount ba, Date dateBegin, Date dateEnd, Tag ta);
 }

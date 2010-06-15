@@ -6,6 +6,7 @@ import java.util.List;
 
 import models.BankAccount;
 import models.Operation;
+import models.Tag;
 import models.User;
 import controllers.Application;
 
@@ -68,9 +69,37 @@ public class BankAccountServiceImpl implements BankAccountService {
 		for (Operation op: operations) {
 			result = result.add(BigDecimal.valueOf(op.amount));
 		}
-		
 		return result;
+	}
+	
+	public BigDecimal getBudgetForTag(BankAccount ba, Date dateBegin, Date dateEnd, Tag ta) {
+		List<Operation> operations = 
+					/*Operation.find("select distinct op from Operation op " +
+							"           join op.tags as t" +
+							"			where          "+
+							"			bankAccount = :bankAccount and (date < :dateBegin and date > :dateEnd) " +
+							"			order by date ASC")
+										//.bind("tag", ta)
+										.bind("bankAccount", ba)
+										.bind("dateBegin", dateBegin)
+										.bind("dateEnd", dateEnd).fetch();*/
+					Operation.find("select op from Operation op " +
+							"		join op.tags as t" +
+							"		where "+
+							"       t in (:tag) and" +
+							"       op.bankAccount = (:bankAccount) and "+
+							"		(op.date >= :dateBegin and op.date < :dateEnd)")
+							.bind("dateBegin", dateBegin)
+							.bind("dateEnd", dateEnd)
+							.bind("bankAccount", ba)
+							.bind("tag", ta)
+							.fetch();
 		
+		BigDecimal result = BigDecimal.valueOf(0d);
+		for (Operation op: operations) {
+			result = result.add(BigDecimal.valueOf(op.amount));
+		}
+		return result;
 	}
 	
 	

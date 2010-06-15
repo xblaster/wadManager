@@ -168,4 +168,33 @@ public class ServiceTest extends UnitTest{
 		cal.add(Calendar.MONTH, -2);
 		assertEquals(BigDecimal.valueOf(0.0),bService.getAmountAt(bAccount, cal.getTime()));
 	}
+	
+	@Test
+	public void amountForTagTest() {
+		User u = fetchOnTheFlyCreatedUser();
+		
+		BankAccount bAccount = new BankAccount();
+		bAccount.user = u;
+		bAccount.name = "bankAddTest";
+		
+		bService.save(bAccount);
+		
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.MONTH, -1);
+		
+		Operation op = new Operation();
+		op.name = "test";
+		op.amount = 2348;
+		op.date = cal.getTime();
+		op.bankAccount = bAccount;
+		Tag t = tService.getOrCreateByName("test1");
+		op.tags.add(t);
+		bService.saveOperation(op);
+		
+		cal.add(Calendar.MONTH, -2);
+		assertEquals(BigDecimal.valueOf(2348.0),bService.getBudgetForTag(bAccount, 
+																		cal.getTime(), 
+																		new Date(), 
+																		t));
+	}
 }

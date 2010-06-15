@@ -191,6 +191,27 @@
 	</form>
 </div>
 
+<!--  summary -->
+
+<div class="span-24 last">
+<table class="accountTab">
+<thead>
+	<td>TagName</td>
+	<td>Budget</td>
+</thead>
+	#{list items:tags, as:'tag'}
+	<tr>
+		<td>
+			<span style="background-color: ${tag.color}" class="operationTag">${tag.name}</span>
+		</td>
+			
+		<td>
+			${budgets[tag]}
+		</td>
+	</tr>		
+	#{/list}
+	<img src="http://chart.apis.google.com/chart?cht=p3&chs=320x200&chd=s:Hellob&chd=t:${chartVal}&chdl=${chartLabel}"/>
+
 <script>
 	$(':checkbox').change(function() {
 		//$(this).closest('tr').css('background-color', 'red');

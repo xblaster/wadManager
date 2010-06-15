@@ -7,10 +7,11 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import javax.inject.Inject;
 
@@ -100,6 +101,38 @@ public class Banks extends AuthController{
 		renderArgs.put("bankAccount", bankAccount);
 		renderArgs.put("operations", operations);
 		
+		//fetch all budget
+		
+		String chartVal = "";
+		String chartLabel = "";
+		
+		
+		Map<Tag, Double> budgets = new TreeMap<Tag, Double>(); 
+		for (Tag t : userService.getAllTags()) {
+			Double l = 0d;
+			try {
+				l = Double.valueOf(bankAccountService.getBudgetForTag(bankAccount, dateFormat.parse(beginDate), dateFormat.parse(endDate), t).toString());
+			} catch (NumberFormatException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			chartLabel+=t.name+"|";
+			chartVal+=Math.round(Math.abs(l))+",";
+			budgets.put(t, l);
+			
+			
+			
+			//budgets.put(t, 3l);
+		}
+		
+		renderArgs.put("chartLabel", chartLabel);
+		renderArgs.put("chartVal", chartVal+"0");
+		
+		renderArgs.put("budgets", budgets);
 		
 		
 		Double somme = Double.valueOf(bankAccountService.getAmountAt(bankAccount, origDate).toString());
@@ -226,6 +259,21 @@ public class Banks extends AuthController{
 					if (op.name.contains("PRELEVEMENT")) {
 						Tag t = tagService.getOrCreateByName("PREL");
 						op.tags.add(t);
+					}
+					
+					//course
+					if (op.name.contains("LECLER")) {
+						op.tags.add(tagService.getOrCreateByName("COURSE"));
+					}
+					if (op.name.contains("CARREFOUR")) {
+						op.tags.add(tagService.getOrCreateByName("COURSE"));
+					}
+					if (op.name.contains("INTERMARCHE")) {
+						op.tags.add(tagService.getOrCreateByName("COURSE"));
+					}
+					
+					if (op.name.contains("CORA")) {
+						op.tags.add(tagService.getOrCreateByName("COURSE"));
 					}
 					
 					//op.save();
