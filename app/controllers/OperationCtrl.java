@@ -55,7 +55,7 @@ public class OperationCtrl extends AuthController {
 		bService.saveOperation(op);
 		
 		flash.success("operation '%s' saved", operation.name);
-		Banks.show(bService.getByOperation(op).getId());
+		Banks.show(bService.getByOperation(op).getId(), null, null);
 		
 		
 		//String result = "";

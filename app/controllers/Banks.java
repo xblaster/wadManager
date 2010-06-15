@@ -7,6 +7,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -39,21 +41,75 @@ public class Banks extends AuthController{
 		render();
 	}
 	
-	public static void show(Long id) {
+	public static void show(Long id, String beginDate, String endDate) {
+		//prepare date
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+		Calendar cal = Calendar.getInstance();
+		
+		if (endDate == null) {
+			
+			if (beginDate == null) {
+			
+				int month = cal.get(Calendar.MONTH);
+				int year = cal.get(Calendar.YEAR);
+				cal.set(year, month, 1);
+			
+				beginDate = dateFormat.format(cal.getTime());
+			} else {
+				try {
+					cal.setTime(dateFormat.parse(beginDate));
+				} catch (ParseException e) {
+					flash.error("Your interval seems to be corrupted");
+					show(id, null, null);
+				}
+			}
+			cal.add(Calendar.MONTH, 1);
+			endDate = dateFormat.format(cal.getTime());
+			
+			show(id, beginDate, endDate);
+		}
+		
+		Date origDate = null; 
+		
+		try {
+			origDate = dateFormat.parse(beginDate);
+			cal.setTime(origDate);
+		} catch (ParseException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		renderArgs.put("year", cal.get(Calendar.YEAR));
+		renderArgs.put("month", cal.get(Calendar.MONTH)+1);
+		
+		
+		renderArgs.put("beginDate", beginDate);
+		renderArgs.put("endDate", endDate);
+		
+		//retrieve bank account
 		BankAccount bankAccount = BankAccount.findById(id);
-		List <Operation> operations = Operation.find("bankAccount = ? order by date ASC", bankAccount).fetch();
+
+		
+		List<Operation> operations = null;
+		try {
+			operations = Operation.find("bankAccount = ? and (date > ? and date < ? )order by date ASC", bankAccount, dateFormat.parse(beginDate), dateFormat.parse(endDate)).fetch();
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		renderArgs.put("bankAccount", bankAccount);
 		renderArgs.put("operations", operations);
 		
 		
 		
-		Double somme = 0d;
+		Double somme = Double.valueOf(bankAccountService.getAmountAt(bankAccount, origDate).toString());
+		renderArgs.put("initialSomme", somme);
+		
 		for (Operation op : operations ) {
 			somme+= op.amount;
 		}
 		
 		renderArgs.put("somme", somme);
-		
 		renderArgs.put("tags", userService.getAllTags());
 		
 		render();
@@ -100,7 +156,7 @@ public class Banks extends AuthController{
 		
 		flash.success("Operation %s created", name);
 		
-		show(bankId);
+		show(bankId, null, null);
 	}
 	
 	public static void add(String name) {
@@ -128,7 +184,7 @@ public class Banks extends AuthController{
 			bufRdr = new BufferedReader(new FileReader(importFile));
 		} catch (FileNotFoundException e) {
 			flash.error("Can't open file");
-			show(bankId);
+			show(bankId, null, null);
 			return;
 		}
 		
@@ -150,7 +206,7 @@ public class Banks extends AuthController{
 				} catch (ParseException e) {
 					// TODO Auto-generated catch block
 					flash.error("Can't parse date format %s",res[0]);
-					show(bankId);
+					show(bankId, null, null);
 				}
 				
 				op.bankAccount = bAccount;
@@ -168,7 +224,7 @@ public class Banks extends AuthController{
 					}
 					
 					if (op.name.contains("PRELEVEMENT")) {
-						Tag t = tagService.getOrCreateByName("PRELEVEMENT");
+						Tag t = tagService.getOrCreateByName("PREL");
 						op.tags.add(t);
 					}
 					
@@ -181,7 +237,7 @@ public class Banks extends AuthController{
 			}
 		} catch (IOException e) {
 			flash.error("Can't read the file");
-			show(bankId);
+			show(bankId, null, null);
 			return;
 		}
 		
@@ -189,12 +245,12 @@ public class Banks extends AuthController{
 			bufRdr.close();
 		} catch (IOException e) {
 			flash.error("Can't close the file");
-			show(bankId);
+			show(bankId, null, null);
 			return;
 		}
 		
 		flash.success("Import successfull");
-		show(bankId);
+		show(bankId, null, null);
 	}
 	
 	public static void batch(List<Long> selected, String jsAction, String jsParam) {
@@ -216,9 +272,6 @@ public class Banks extends AuthController{
 				bankAccountService.saveOperation(op);
 			}
 		}
-		/*System.out.println(jsAction);
-		System.out.println(jsParam);
-		System.out.println(selected.size());*/
 	}
 	
 	

@@ -2,6 +2,44 @@
 
 <h2><a href="@{index()}">Manage account</a> &gt; ${bankAccount.name}</h2>
 
+<!--  ${beginDate} - ${endDate} -->
+
+<!-- navigation -->
+
+
+
+%{
+	for (i in 1..12) {
+}%
+
+	#{if (month==(i))}
+		<b>${i}</b>
+	#{/if}
+	#{else}
+	<a href="@{show(bankAccount.id, "01-"+i+"-"+year)}">${i}</a> 
+	#{/else}
+	|
+%{
+	}
+}%
+<br/>
+%{
+	for (i in (year-2)..(year+2)) {
+}%
+
+	#{if (year==(i))}
+		<b>${i}</b>
+	#{/if}
+	#{else}
+	<a href="@{show(bankAccount.id, "01-"+month+"-"+i)}">${i}</a> 
+	#{/else}
+	|
+%{
+	}
+}%
+
+
+<!-- end navigation -->
 <div class="span-24 last">
 	<p>
 	#{list items:tags, as:'tag'}
@@ -26,6 +64,22 @@
 	<td>Action</td>
 </thead>
 
+<!--  somme initial -->
+
+	<tr>
+	<td></td>
+		<td>
+		</td>
+		<td>
+			<strong>INITIAL</strong>
+		</td>
+		
+		<td style="text-align:right">
+			${initialSomme}
+		</td>
+		<td>
+		</td>
+	</tr>
 
 #{list items:operations, as:'operation'}
 	<tr>
@@ -65,6 +119,7 @@
 #{/list}
 
 	<tr>
+	<td></td>
 		<td>
 		</td>
 		<td>

@@ -1,5 +1,7 @@
 import injection.WadGuiceModule;
 
+import java.math.BigDecimal;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -137,5 +139,33 @@ public class ServiceTest extends UnitTest{
 		
 		op.tags.add(t);
 		op.save();
+	}
+	
+	@Test
+	public void amountAtTest() {
+		User u = fetchOnTheFlyCreatedUser();
+		
+		BankAccount bAccount = new BankAccount();
+		bAccount.user = u;
+		bAccount.name = "bankAddTest";
+		
+		bService.save(bAccount);
+		
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.MONTH, -1);
+		
+		Operation op = new Operation();
+		op.name = "test";
+		op.amount = 234;
+		op.date = cal.getTime();
+		op.bankAccount = bAccount;
+		
+		bService.saveOperation(op);
+		
+		assertEquals(BigDecimal.valueOf(234.0),bService.getAmountAt(bAccount, new Date()));
+		
+		
+		cal.add(Calendar.MONTH, -2);
+		assertEquals(BigDecimal.valueOf(0.0),bService.getAmountAt(bAccount, cal.getTime()));
 	}
 }

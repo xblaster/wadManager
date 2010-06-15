@@ -1,5 +1,7 @@
 package services;
 
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 import models.BankAccount;
@@ -15,6 +17,8 @@ public interface BankAccountService {
 	public List<BankAccount> getByUser(User u);
 	
 	public BankAccount getByOperation(Operation op);
+	
+	public BigDecimal getAmountAt(BankAccount ba, Date date);
 	
 	
 	/**

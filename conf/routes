@@ -11,7 +11,10 @@ GET     /public/                                staticDir:public
 
 
 # Catch all
+*		/bank/{id}/from{beginDate}/to{endDate} Banks.show
 *       /bank/{id}                  Banks.show
+
+
 
 *       /{controller}/{action}                  {controller}.{action}
 *      /admin              module:crud

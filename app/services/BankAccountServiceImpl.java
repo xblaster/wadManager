@@ -1,5 +1,7 @@
 package services;
 
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 import models.BankAccount;
@@ -56,6 +58,19 @@ public class BankAccountServiceImpl implements BankAccountService {
 		//BankAccount ba =  BankAccount.find("byOperation", op).first();
 		BankAccount ba = BankAccount.findById(op.bankAccount.getId());
 		return ba;
+	}
+
+	@Override
+	public BigDecimal getAmountAt(BankAccount ba, Date date) {
+		List<Operation> operations = Operation.find("bankAccount = ? and date < ? order by date ASC", ba, date).fetch();
+		
+		BigDecimal result = BigDecimal.valueOf(0d);
+		for (Operation op: operations) {
+			result = result.add(BigDecimal.valueOf(op.amount));
+		}
+		
+		return result;
+		
 	}
 	
 	
