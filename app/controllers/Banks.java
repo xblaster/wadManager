@@ -22,6 +22,7 @@ import models.User;
 import services.BankAccountService;
 import services.TagService;
 import services.UserService;
+import util.Chart;
 
 import common.AuthController;
 
@@ -103,10 +104,6 @@ public class Banks extends AuthController{
 		
 		//fetch all budget
 		
-		String chartVal = "";
-		String chartLabel = "";
-		
-		
 		Map<Tag, Double> budgets = new TreeMap<Tag, Double>(); 
 		for (Tag t : userService.getAllTags()) {
 			Double l = 0d;
@@ -120,19 +117,13 @@ public class Banks extends AuthController{
 				e.printStackTrace();
 			}
 			
-			chartLabel+=t.name+"|";
-			chartVal+=Math.round(Math.abs(l))+",";
 			budgets.put(t, l);
-			
-			
-			
 			//budgets.put(t, 3l);
 		}
 		
-		renderArgs.put("chartLabel", chartLabel);
-		renderArgs.put("chartVal", chartVal+"0");
 		
 		renderArgs.put("budgets", budgets);
+		renderArgs.put("chartImg", Chart.generateBudgetChartImg(budgets));
 		
 		
 		Double somme = Double.valueOf(bankAccountService.getAmountAt(bankAccount, origDate).toString());
@@ -247,9 +238,13 @@ public class Banks extends AuthController{
 					
 					//bankAccountService.saveOperation(op);
 					
-					if (op.name.contains("CARTE")) {
+					/*if (op.name.contains("CARTE")) {
 						op.tags.add(tagService.getOrCreateByName("CB"));
-					}
+					}*/
+					
+					
+					op.name = op.name.replace("([ ])*DU ([ 0-9])*" , "");
+					op.name = op.name.replace("FACTURE CARTE" , "");
 					
 					
 					if (op.name.contains("DAB")) {
@@ -257,6 +252,12 @@ public class Banks extends AuthController{
 					}
 					
 					if (op.name.contains("PRELEVEMENT")) {
+						Tag t = tagService.getOrCreateByName("PREL");
+						op.name = op.name.replace("PRELEVEMENT ", "");
+						op.tags.add(t);
+					}
+					
+					if (op.name.contains("ECHEANCE")) {
 						Tag t = tagService.getOrCreateByName("PREL");
 						op.tags.add(t);
 					}
