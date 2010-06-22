@@ -37,3 +37,7 @@ h1 {
 .operationTag a {
 	color: #FFF;
 }
+
+.fictive {
+	opacity:0.4;
+}

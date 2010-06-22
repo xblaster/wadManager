@@ -82,7 +82,7 @@
 	</tr>
 
 #{list items:operations, as:'operation'}
-	<tr>
+	<tr #{if operation.fictive == true} class="fictive" #{/if}>
 	<td><input type="checkbox" name="selected" value="${operation.id}"/></td>
 	<td>${operation.date.format("dd/MM/yyyy")} <em>(${operation.date.since()})</em></td>
 	<td>

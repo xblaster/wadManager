@@ -1,11 +1,11 @@
 package controllers;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeSet;
 
 import javax.inject.Inject;
 
-import models.BankAccount;
 import models.Operation;
 import models.Tag;
 import services.BankAccountService;
@@ -37,15 +37,29 @@ public class OperationCtrl extends AuthController {
 	}
 	
 	public static void save(Operation operation) {
+		
 		System.out.println(operation.name);
 		System.out.println(operation.id);
 		
-		List<String> tagsId = Arrays.asList(params.getAll("tag"));
+		List<String> tagsId;
+
+		if (params.getAll("tag")!=null) {
+			tagsId = Arrays.asList(params.getAll("tag"));
+		} else {
+			tagsId = new ArrayList<String>();
+		}
+
+
 		
 		Operation op = bService.getOperationById(operation.id);
 		op.name = operation.name;
 		op.tags = new TreeSet();
-		
+
+		if (params.get("fictive")!=null) {
+			operation.fictive = true;
+		} else {
+			operation.fictive = false;
+		}
 		
 		for (String i : tagsId) {
 			Tag t = tService.getById(Long.valueOf(i));

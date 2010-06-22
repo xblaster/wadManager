@@ -72,7 +72,7 @@ public class BankAccountServiceImpl implements BankAccountService {
 		return result;
 	}
 	
-	public BigDecimal getBudgetForTag(BankAccount ba, Date dateBegin, Date dateEnd, Tag ta) {
+	public BigDecimal calculateBudgetForTag(BankAccount ba, Date dateBegin, Date dateEnd, Tag ta) {
 		List<Operation> operations = 
 					/*Operation.find("select distinct op from Operation op " +
 							"           join op.tags as t" +

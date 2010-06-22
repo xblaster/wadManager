@@ -108,7 +108,7 @@ public class Banks extends AuthController{
 		for (Tag t : userService.getAllTags()) {
 			Double l = 0d;
 			try {
-				l = Double.valueOf(bankAccountService.getBudgetForTag(bankAccount, dateFormat.parse(beginDate), dateFormat.parse(endDate), t).toString());
+				l = Double.valueOf(bankAccountService.calculateBudgetForTag(bankAccount, dateFormat.parse(beginDate), dateFormat.parse(endDate), t).toString());
 			} catch (NumberFormatException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -130,7 +130,10 @@ public class Banks extends AuthController{
 		renderArgs.put("initialSomme", somme);
 		
 		for (Operation op : operations ) {
-			somme+= op.amount;
+			//if it's not a fictive operation
+			if (op.fictive == false) {
+				somme+= op.amount;
+			}
 		}
 		
 		renderArgs.put("somme", somme);

@@ -192,7 +192,7 @@ public class ServiceTest extends UnitTest{
 		bService.saveOperation(op);
 		
 		cal.add(Calendar.MONTH, -2);
-		assertEquals(BigDecimal.valueOf(2348.0),bService.getBudgetForTag(bAccount, 
+		assertEquals(BigDecimal.valueOf(2348.0),bService.calculateBudgetForTag(bAccount, 
 																		cal.getTime(), 
 																		new Date(), 
 																		t));

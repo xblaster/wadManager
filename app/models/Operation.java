@@ -15,9 +15,16 @@ import play.db.jpa.Model;
 public class Operation extends Model {
 
 	public String name;
+	public String importName;
+	
 	public Date date;
+
+	public String description;
 	
 	public double amount;
+	
+	public boolean fictive;
+	
 	
 	@ManyToOne
 	public BankAccount bankAccount;
@@ -32,5 +39,6 @@ public class Operation extends Model {
 	public Operation() {
 		super();
 		tags = new TreeSet<Tag>();
+		fictive = false;
 	}
 }

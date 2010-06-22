@@ -33,5 +33,5 @@ public interface BankAccountService {
 	
 	public boolean operationExists(Operation op);
 	
-	public BigDecimal getBudgetForTag(BankAccount ba, Date dateBegin, Date dateEnd, Tag ta);
+	public BigDecimal calculateBudgetForTag(BankAccount ba, Date dateBegin, Date dateEnd, Tag ta);
 }
