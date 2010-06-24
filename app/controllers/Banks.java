@@ -170,8 +170,8 @@ public class Banks extends AuthController{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			if (-tagBudget<op.amount) {
-				previsionSomme -= (op.amount + tagBudget);
+			if (Math.abs(tagBudget)<Math.abs(op.amount)) {
+				previsionSomme += (op.amount - tagBudget);
 				//System.out.println(op.amount);
 				//System.out.println("-:"+ (op.amount + tagBudget));
 			}

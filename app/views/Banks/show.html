@@ -157,10 +157,11 @@
 	<td>Let</td>
 </thead>
 	#{list items:operationPrevisions, as:'operationPrevision'}
-	<tr #{if (operationPrevision.amount < -budgets[operationPrevision.tag])} class="error" #{/if}>
+	<tr #{if (Math.abs(operationPrevision.amount) < Math.abs(budgets[operationPrevision.tag]))} class="error" #{/if}>
 		<td>
 			<span style="background-color: ${operationPrevision.tag.color}" class="operationTag">${operationPrevision.tag.name}</span>
 			<a href="@{OperationCtrl.editPrevision(operationPrevision.id)}">edit</a>
+			[<a href="@{PrevisionCtrl.delete(operationPrevision.id)}">x</a>]
 		</td>
 			
 		<td>
@@ -171,11 +172,11 @@
 		</td>
 		<td>
 			
-			#{if (operationPrevision.amount < -budgets[operationPrevision.tag])}
+			#{if (Math.abs(operationPrevision.amount) < Math.abs(budgets[operationPrevision.tag]))}
 				${0.format("####0.00")}
 			#{/if}
 			#{else}
-				${(operationPrevision.amount+budgets[operationPrevision.tag]).format("####0.00")}
+				${(operationPrevision.amount-budgets[operationPrevision.tag]).format("####0.00")}
 			#{/else}
 		
 			
@@ -210,6 +211,7 @@
 			
 		<td>
 			${budgets[tag]}
+			<a href="@{PrevisionCtrl.add(tag.name, tag.id, bankAccount.id , budgets[tag], "01-"+(month+1)+"-"+year)}">Add as prevision for next month</a>
 		</td>
 	</tr>		
 	#{/list}
