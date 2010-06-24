@@ -6,8 +6,6 @@
 
 <!-- navigation -->
 
-
-
 %{
 	for (i in 1..12) {
 }%
@@ -38,8 +36,9 @@
 	}
 }%
 
-
 <!-- end navigation -->
+
+
 <div class="span-24 last">
 	<p>
 	#{list items:tags, as:'tag'}
@@ -55,85 +54,7 @@
 <div class="span-24 last">
 #{form @save(), id:'selectedForm'}
 
-<table class="accountTab">
-<thead>
-	<td></td>
-	<td>Date</td>
-	<td>Operation name</td>
-	<td>Operation amount</td>
-	<td>Action</td>
-</thead>
-
-<!--  somme initial -->
-
-	<tr>
-	<td></td>
-		<td>
-		</td>
-		<td>
-			<strong>INITIAL</strong>
-		</td>
-		
-		<td style="text-align:right">
-			${initialSomme}
-		</td>
-		<td>
-		</td>
-	</tr>
-
-#{list items:operations, as:'operation'}
-	<tr #{if operation.fictive == true} class="fictive" #{/if}>
-	<td><input type="checkbox" name="selected" value="${operation.id}"/></td>
-	<td>${operation.date.format("dd/MM/yyyy")} <em>(${operation.date.since()})</em></td>
-	<td>
-		#{list items:operation.tags, as:'tag'}
-			<span style="background-color: ${tag.color}" class="operationTag">${tag.name}</span>
-		#{/list}
-		${operation.name}
-		
-		<a href="@{OperationCtrl.edit(operation.id)}">edit</a>
-	</td>
-		
-	<td style="text-align:right">
-		#{if operation.amount < 0}
-			<span style="color: #F00">${operation.amount}</span>
-		#{/if} 
-		#{else}
-			${operation.amount}
-		#{/else}
-			</td>	
-	<td>
-		<a id="${operation.id}-delete">[X]</a>
-		<script>
-			$('#${operation.id}-delete').click(function() {
-					$.post('@{deleteOperation(operation.id)}', function() {
-						location.reload();
-					})
-			})
-		</script>	
-	
-	</td>
-		
-		
-	</tr>
-#{/list}
-
-	<tr>
-	<td></td>
-		<td>
-		</td>
-		<td>
-			<strong>Total</strong>
-		</td>
-		
-		<td style="text-align:right">
-			${somme}
-		</td>
-		<td>
-		</td>
-	</tr>
-
-</table>
+#{operationList operations:operations, somme:somme, initialSomme: initialSomme /}
 
 #{/form}
 </div>
@@ -149,6 +70,39 @@
 	#{/list}
 	</p>
 </div>
+
+<script>
+	$(':checkbox').change(function() {
+		//$(this).closest('tr').css('background-color', 'red');
+		if ($(this).is(':checked')) {
+				$(this).closest('tr').addClass("success");
+		} else {
+				$(this).closest('tr').removeClass("success");
+		}
+	});
+
+	function launchAction(action, param) {
+		var params = $("#selectedForm").serialize();
+		params+= "&jsAction="+ action;
+		params+= "&jsParam="+ param;
+		//params["rzerzrz"] = 3;
+		$.post("@{batch()}", params, function() {
+			window.location.reload();
+		});
+	}
+
+	$('.addTagBtn').click(function() {
+		launchAction("addTag", $(this).children('a').text());
+		return false;
+	});
+
+	$('.delTagBtn').click(function() {
+		launchAction("delTag", $(this).children('a').text());
+		return false;
+	});
+	
+	
+</script>
 
 
 <div class="span-24 last">
@@ -191,7 +145,56 @@
 	</form>
 </div>
 
+
+
+<h1>Previsions</h1>
+<div class="span-24 last">
+<table class="accountTab">
+<thead>
+	<td>Name</td>
+	<td>Budget</td>
+	<td>Consumed</td>
+	<td>Let</td>
+</thead>
+	#{list items:operationPrevisions, as:'operationPrevision'}
+	<tr #{if (operationPrevision.amount < -budgets[operationPrevision.tag])} class="error" #{/if}>
+		<td>
+			<span style="background-color: ${operationPrevision.tag.color}" class="operationTag">${operationPrevision.tag.name}</span>
+			<a href="@{OperationCtrl.editPrevision(operationPrevision.id)}">edit</a>
+		</td>
+			
+		<td>
+			${operationPrevision.amount.format("####0.00")}
+		</td>
+		<td>
+			${budgets[operationPrevision.tag].format("####0.00")}
+		</td>
+		<td>
+			
+			#{if (operationPrevision.amount < -budgets[operationPrevision.tag])}
+				${0.format("####0.00")}
+			#{/if}
+			#{else}
+				${(operationPrevision.amount+budgets[operationPrevision.tag]).format("####0.00")}
+			#{/else}
+		
+			
+		</td>
+	</tr>		
+	#{/list}
+	
+	<tr>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td>${previsionSomme.format("####0.00")}</td>
+	</tr>
+	
+</table>
+
 <!--  summary -->
+
+<h1>Summary</h1>
 
 <div class="span-24 last">
 <table class="accountTab">
@@ -210,37 +213,6 @@
 		</td>
 	</tr>		
 	#{/list}
-	${chartImg.raw()}
-
-<script>
-	$(':checkbox').change(function() {
-		//$(this).closest('tr').css('background-color', 'red');
-		if ($(this).is(':checked')) {
-				$(this).closest('tr').addClass("success");
-		} else {
-				$(this).closest('tr').removeClass("success");
-		}
-	});
-
-	function launchAction(action, param) {
-		var params = $("#selectedForm").serialize();
-		params+= "&jsAction="+ action;
-		params+= "&jsParam="+ param;
-		//params["rzerzrz"] = 3;
-		$.post("@{batch()}", params, function() {
-			window.location.reload();
-		});
-	}
-
-	$('.addTagBtn').click(function() {
-		launchAction("addTag", $(this).children('a').text());
-		return false;
-	});
-
-	$('.delTagBtn').click(function() {
-		launchAction("delTag", $(this).children('a').text());
-		return false;
-	});
 	
-	
-</script>
+</table>
+${chartImg.raw()}

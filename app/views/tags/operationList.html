@@ -1,0 +1,83 @@
+
+<table class="accountTab">
+<thead>
+	<td></td>
+	<td>Date</td>
+	<td>Operation name</td>
+	<td>Operation amount</td>
+	<td>Action</td>
+</thead>
+
+<!--  somme initial -->
+
+	<tr>
+	<td></td>
+		<td>
+		</td>
+		<td>
+			<strong>INITIAL</strong>
+		</td>
+		
+		<td style="text-align:right">
+			${_initialSomme}
+		</td>
+		<td>
+		</td>
+	</tr>
+
+#{list items:_operations, as:'operation'}
+	<tr #{if operation.fictive == true} class="fictive" #{/if}>
+	<td><input type="checkbox" name="selected" value="${operation.id}"/></td>
+	<td>${operation.date.format("dd/MM/yyyy")} <em>(${operation.date.since()})</em></td>
+	<td>
+		#{list items:operation.tags, as:'tag'}
+			<span style="background-color: ${tag.color}" class="operationTag">${tag.name}</span>
+		#{/list}
+		${operation.name}
+		<a href="@{OperationCtrl.edit(operation.id)}">edit</a>
+		#{if operation.comment !=""}
+		<br/>
+		<span class="comment">${operation.comment}</span>
+		#{/if}
+	</td>
+		
+	<td style="text-align:right">
+		#{if operation.amount < 0}
+			<span style="color: #F00">${operation.amount.format("####0.00")} </span>
+		#{/if} 
+		#{else}
+			${operation.amount.format("####0.00")}
+		#{/else}
+			</td>	
+	<td>
+		<a id="${operation.id}-delete">[X]</a>
+		<script>
+			$('#${operation.id}-delete').click(function() {
+					$.post('@{deleteOperation(operation.id)}', function() {
+						location.reload();
+					})
+			})
+		</script>	
+	
+	</td>
+		
+		
+	</tr>
+#{/list}
+
+	<tr>
+	<td></td>
+		<td>
+		</td>
+		<td>
+			<strong>Total</strong>
+		</td>
+		
+		<td style="text-align:right">
+			${_somme.format("####0.00")}
+		</td>
+		<td>
+		</td>
+	</tr>
+
+</table>

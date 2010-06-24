@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +18,7 @@ import javax.inject.Inject;
 
 import models.BankAccount;
 import models.Operation;
+import models.OperationPrevision;
 import models.Tag;
 import models.User;
 import services.BankAccountService;
@@ -94,7 +96,7 @@ public class Banks extends AuthController{
 		
 		List<Operation> operations = null;
 		try {
-			operations = Operation.find("bankAccount = ? and (date > ? and date < ? )order by date ASC", bankAccount, dateFormat.parse(beginDate), dateFormat.parse(endDate)).fetch();
+			operations = Operation.find("bankAccount = ? and (date >= ? and date < ? )order by date ASC", bankAccount, dateFormat.parse(beginDate), dateFormat.parse(endDate)).fetch();
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -120,11 +122,26 @@ public class Banks extends AuthController{
 			budgets.put(t, l);
 			//budgets.put(t, 3l);
 		}
-		
-		
 		renderArgs.put("budgets", budgets);
-		renderArgs.put("chartImg", Chart.generateBudgetChartImg(budgets));
 		
+		//////////////////////////////////////////////////////////
+		//feth all operationPrevisions
+		
+		Collection<OperationPrevision> operationPrevisionsList = null; 
+		try {
+			operationPrevisionsList = bankAccountService.getAllOperationPrevisions(dateFormat.parse(beginDate), dateFormat.parse(endDate));
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		renderArgs.put("operationPrevisions", operationPrevisionsList);
+		
+		
+		
+		
+		
+		renderArgs.put("chartImg", Chart.generateBudgetChartImg(budgets));
 		
 		Double somme = Double.valueOf(bankAccountService.getAmountAt(bankAccount, origDate).toString());
 		renderArgs.put("initialSomme", somme);
@@ -135,6 +152,32 @@ public class Banks extends AuthController{
 				somme+= op.amount;
 			}
 		}
+		
+		
+		
+		
+		
+		Double previsionSomme = somme;
+		//System.out.println("somme:"+ somme);
+		for (OperationPrevision op: operationPrevisionsList) {
+			Double tagBudget = 0d;
+			try {
+				tagBudget = Double.valueOf(bankAccountService.calculateBudgetForTag(bankAccount, dateFormat.parse(beginDate), dateFormat.parse(endDate), op.tag).toString());
+			} catch (NumberFormatException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			if (-tagBudget<op.amount) {
+				previsionSomme -= (op.amount + tagBudget);
+				//System.out.println(op.amount);
+				//System.out.println("-:"+ (op.amount + tagBudget));
+			}
+		}
+		
+		renderArgs.put("previsionSomme", previsionSomme);
 		
 		renderArgs.put("somme", somme);
 		renderArgs.put("tags", userService.getAllTags());

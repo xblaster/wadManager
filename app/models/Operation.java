@@ -17,6 +17,8 @@ public class Operation extends Model {
 	public String name;
 	public String importName;
 	
+	public String comment;
+	
 	public Date date;
 
 	public String description;

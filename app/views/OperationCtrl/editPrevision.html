@@ -1,14 +1,14 @@
 #{extends 'default.html' /}
 #{set title:'Home' /}
 
-#{form @save()}
+#{form @savePrevision()}
 
 
-#{field 'operation.id'}
+#{field 'operationPrevision.id'}
 <input type="hidden" id="${field.id}" name="${field.name}" value="${field.value}">
 #{/}
 
-#{field 'operation.name'}
+#{field 'operationPrevision.name'}
 <p>
   <label>&{field.name}</label>
   <input type="text" id="${field.id}" name="${field.name}" value="${field.value}" class="${field.errorClass}" size="100">
@@ -16,15 +16,7 @@
 </p>
 #{/}
 
-#{field 'operation.comment'}
-<p>
-  <label>&{field.name}</label>
-  <input type="text" id="${field.id}" name="${field.name}" value="${field.value}" class="${field.errorClass}" size="100">
-  <span class="error">${field.error}</span>
-</p>
-#{/}
-
-#{field 'operation.amount'}
+#{field 'operationPrevision.amount'}
 <p>
   <label>&{field.name}</label>
   <input type="text" id="${field.id}" name="${field.name}" value="${field.value}" class="${field.errorClass}">
@@ -32,24 +24,17 @@
 </p>
 #{/}
 
-<p>
-<input type="checkbox" name="fictive" value="1"
-	 #{if operation.fictive==true}
-	 	checked
-	 #{/if}/> Fictive operation
-
-</p>
-
-<h3>Tags</h3>
+<h3>Tag</h3>
 
 #{list tags, as:'tag'}
-	<input type="checkbox" name="tag" value="${tag.id}"
-	 #{if operation.tags.contains(tag)}
+	<input type="radio" name="tag" value="${tag.id}"
+	 #{if operationPrevision.tag.equals(tag)}
 	 	checked
 	 #{/if}/> ${tag.name}
+	 <br/>
 #{/list}
 
-<br/>
+
 
 <input type="submit" value="save"/>
 

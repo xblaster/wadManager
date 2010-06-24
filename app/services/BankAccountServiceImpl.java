@@ -1,11 +1,14 @@
 package services;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
 import models.BankAccount;
 import models.Operation;
+import models.OperationPrevision;
 import models.Tag;
 import models.User;
 import controllers.Application;
@@ -100,6 +103,32 @@ public class BankAccountServiceImpl implements BankAccountService {
 			result = result.add(BigDecimal.valueOf(op.amount));
 		}
 		return result;
+	}
+
+	@Override
+	public Collection<OperationPrevision> getAllOperationPrevisions(Date begin,
+			Date end) {
+		Collection <OperationPrevision> result = OperationPrevision.find("date >= ? and date < ?",begin, end).fetch();
+		if (result == null) {
+			result = new ArrayList<OperationPrevision>();
+		}
+		return result;
+	}
+
+	@Override
+	public BankAccount getByOperationPrevision(OperationPrevision op) {
+		BankAccount ba = BankAccount.findById(op.bankAccount.getId());
+		return ba;
+	}
+
+	@Override
+	public OperationPrevision getOperationPrevisionById(Long id) {
+		return OperationPrevision.findById(id);
+	}
+
+	@Override
+	public void saveOperationPrevision(OperationPrevision op) {
+		op.save();
 	}
 	
 	

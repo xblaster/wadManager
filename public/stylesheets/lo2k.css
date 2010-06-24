@@ -34,10 +34,20 @@ h1 {
 	display: inline;
 }
 
+.alternate {
+	background-color: #F2F2F2;
+}
+
 .operationTag a {
 	color: #FFF;
 }
 
 .fictive {
 	opacity:0.4;
+}
+
+.comment {
+	color: #AAA;
+	font-size: 80%;
+	margin: 0px;
 }

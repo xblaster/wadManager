@@ -33,7 +33,7 @@ public class Chart {
 		
 		for(Entry<Tag, Double> entry : budgets.entrySet()) {
 			labels.add(entry.getKey().name);
-			values.add(new Integer(Math.abs(entry.getValue().intValue())));
+			values.add((new Integer(Math.abs(entry.getValue().intValue()))/50));
 			colors.add(entry.getKey().color.replace("#", ""));
 		}
 		

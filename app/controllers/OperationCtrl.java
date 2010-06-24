@@ -7,6 +7,7 @@ import java.util.TreeSet;
 import javax.inject.Inject;
 
 import models.Operation;
+import models.OperationPrevision;
 import models.Tag;
 import services.BankAccountService;
 import services.TagService;
@@ -36,6 +37,15 @@ public class OperationCtrl extends AuthController {
 		render();
 	}
 	
+	public static void editPrevision(Long id) {
+		OperationPrevision op = bService.getOperationPrevisionById(id);
+		
+		renderArgs.put("operationPrevision", op);
+		renderArgs.put("tags", uService.getAllTags());
+		
+		render();
+	}
+	
 	public static void save(Operation operation) {
 		
 		System.out.println(operation.name);
@@ -53,6 +63,7 @@ public class OperationCtrl extends AuthController {
 		
 		Operation op = bService.getOperationById(operation.id);
 		op.name = operation.name;
+		op.comment = operation.comment;
 		op.tags = new TreeSet();
 
 		if (params.get("fictive")!=null) {
@@ -84,6 +95,36 @@ public class OperationCtrl extends AuthController {
 			result+= "\n";
 		}*/
 		//renderText(result);
+		
+	}
+	
+public static void savePrevision(OperationPrevision operationPrevision) {
+		
+		System.out.println(operationPrevision.name);
+		System.out.println(operationPrevision.id);
+		
+		List<String> tagsId;
+
+		if (params.getAll("tag")!=null) {
+			tagsId = Arrays.asList(params.getAll("tag"));
+		} else {
+			tagsId = new ArrayList<String>();
+		}
+
+
+		
+		OperationPrevision op = bService.getOperationPrevisionById(operationPrevision.id);
+		op.name = operationPrevision.name;
+		
+		for (String i : tagsId) {
+			Tag t = tService.getById(Long.valueOf(i));
+			op.tag = t;
+		}
+		
+		bService.saveOperationPrevision(op);
+		
+		flash.success("operation prevision '%s' saved", operationPrevision.name);
+		Banks.show(bService.getByOperationPrevision(op).getId(), null, null);
 		
 	}
 }
