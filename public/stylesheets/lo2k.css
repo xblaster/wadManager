@@ -57,6 +57,29 @@ h1 {
 	color: #333;
 }
 
-hr {
-		
+.black {
+	padding: 3em;
+	color: #FFF;
+	background: -moz-linear-gradient(top, #999, #000);
+	background: -webkit-gradient(linear, center top, center bottom, from(#999999), to(#000000)); 
 }
+
+.black h1 { color: #FFF;}
+.black a{color: #FFF;}
+
+.btn {
+	background: -moz-linear-gradient(top, #DDD, #FFF);
+	border: 1px solid #FFF;
+	background: -webkit-gradient(linear, center top, center bottom, from(#DDDDDD), to(#FFFFFF));
+	padding: 0.5em;
+	-moz-border-radius:5px;
+	-webkit-border-radius:5px;
+	color: #333;
+}
+
+a.btn {
+	color: #666;
+}
+
+
+

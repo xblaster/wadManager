@@ -20,23 +20,29 @@
         #{get 'moreScripts' /}
     </head>
     <body>
-    	<div class="container">
+    	<div class="container black">
+    		#{if authenticated}
+				<span style="float:right">
+					${user} <a href="@{Login.disconnect()}" class="btn">Disconnect</a>
+				</span>
+			#{/if}
+    	
     	<h1>WadManager</h1>
 
 	
-		#{if authenticated}
-			<div class="span-24 last" style="text-align:right">
-				${user} <a href="@{Login.disconnect()}">Disconnect</a>
-			</div>
-		#{/if}
+			
+	    	
+	    	#{if flash.success}
+	    		<p class="success">${flash.success}</p>
+			#{/if}
+			
+			#{if flash.error}
+	    		<p class="error">${flash.error}</p>
+			#{/if}
+		</div>	
+    
+    	<div class="container">
     	
-    	#{if flash.success}
-    		<p class="success">${flash.success}</p>
-		#{/if}
-		
-		#{if flash.error}
-    		<p class="error">${flash.error}</p>
-		#{/if}
     	<div class="span-24 last"> 
         	#{doLayout /}
         </div>
