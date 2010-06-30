@@ -62,12 +62,13 @@
 <div class="span-24 last">
 	<p>
 	#{list items:tags, as:'tag'}
-		<span class="operationTag addTagBtn" style="background-color: ${tag.color}"><a onClick="" href="#">${tag.name}</a></span>
+		<span class="operationTag addTagBtn" style="background-color: ${tag.color}"><a href="#">${tag.name}</a></span>
 	#{/list}
 	<br/>
 	#{list items:tags, as:'tag'}
 		<span class="operationTag delTagBtn" style="border: 1px dashed ${tag.color}"><a style="color: ${tag.color}" href="#">${tag.name}</a></span>
 	#{/list}
+	<span class="delOpBtn"><a href="#"><img src="@{'/public/images/icons/brick_delete.png'}" alt="edit"/></a></span>
 	</p>
 </div>
 
@@ -98,6 +99,11 @@
 
 	$('.delTagBtn').click(function() {
 		launchAction("delTag", $(this).children('a').text());
+		return false;
+	});
+
+	$('.delOpBtn').click(function() {
+		launchAction("delOp", $(this).children('a').text());
 		return false;
 	});
 	
@@ -159,9 +165,10 @@
 	#{list items:operationPrevisions, as:'operationPrevision'}
 	<tr #{if (Math.abs(operationPrevision.amount) < Math.abs(budgets[operationPrevision.tag]))} class="error" #{/if}>
 		<td>
+			<a href="@{OperationCtrl.editPrevision(operationPrevision.id)}"><img src="@{'/public/images/icons/brick_edit.png'}" alt="edit"/></a>
+			<a href="@{PrevisionCtrl.delete(operationPrevision.id)}"><img src="@{'/public/images/icons/brick_delete.png'}" alt="delete"/></a>
 			<span style="background-color: ${operationPrevision.tag.color}" class="operationTag">${operationPrevision.tag.name}</span>
-			<a href="@{OperationCtrl.editPrevision(operationPrevision.id)}">edit</a>
-			[<a href="@{PrevisionCtrl.delete(operationPrevision.id)}">x</a>]
+			
 		</td>
 			
 		<td>
@@ -210,8 +217,14 @@
 		</td>
 			
 		<td>
-			${budgets[tag]}
-			<a href="@{PrevisionCtrl.add(tag.name, tag.id, bankAccount.id , budgets[tag], "01-"+(month+1)+"-"+year)}">Add as prevision for next month</a>
+			<a href="@{PrevisionCtrl.add(tag.name, tag.id, bankAccount.id , budgets[tag], "01-"+(month+1)+"-"+year)}">
+				<img src="@{'/public/images/icons/date_next.png'}" alt="delete"/></a>
+			</a>
+				${budgets[tag]}
+		
+			
+					
+			
 		</td>
 	</tr>		
 	#{/list}

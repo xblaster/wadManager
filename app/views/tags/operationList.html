@@ -30,11 +30,13 @@
 	<td><input type="checkbox" name="selected" value="${operation.id}"/></td>
 	<td>${operation.date.format("dd/MM/yyyy")} <em>(${operation.date.since()})</em></td>
 	<td>
+		
 		#{list items:operation.tags, as:'tag'}
 			<span style="background-color: ${tag.color}" class="operationTag">${tag.name}</span>
 		#{/list}
+		
 		${operation.name}
-		<a href="@{OperationCtrl.edit(operation.id)}">edit</a>
+		
 		#{if operation.comment !=""}
 		<br/>
 		<span class="comment">${operation.comment}</span>
@@ -50,15 +52,7 @@
 		#{/else}
 			</td>	
 	<td>
-		<a id="${operation.id}-delete">[X]</a>
-		<script>
-			$('#${operation.id}-delete').click(function() {
-					$.post('@{deleteOperation(operation.id)}', function() {
-						location.reload();
-					})
-			})
-		</script>	
-	
+		<a href="@{OperationCtrl.edit(operation.id)}"><img src="@{'/public/images/icons/brick_edit.png'}" alt="edit"/></a>
 	</td>
 		
 		

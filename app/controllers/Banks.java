@@ -365,6 +365,8 @@ public class Banks extends AuthController{
 			} else if (jsAction.equals("delTag")) {
 				op.tags.remove(tagService.getOrCreateByName(jsParam));
 				bankAccountService.saveOperation(op);
+			} else if (jsAction.equals("delOp")) {
+				bankAccountService.deleteOperation(l);
 			}
 		}
 	}

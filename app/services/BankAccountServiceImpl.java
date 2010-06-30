@@ -70,7 +70,8 @@ public class BankAccountServiceImpl implements BankAccountService {
 		
 		BigDecimal result = BigDecimal.valueOf(0d);
 		for (Operation op: operations) {
-			result = result.add(BigDecimal.valueOf(op.amount));
+			if (!op.fictive) 
+				result = result.add(BigDecimal.valueOf(op.amount));
 		}
 		return result;
 	}
