@@ -175,7 +175,12 @@
 		<td>
 			<a href="@{OperationCtrl.editPrevision(operationPrevision.id)}"><img src="@{'/public/images/icons/brick_edit.png'}" alt="edit"/></a>
 			<a href="@{PrevisionCtrl.delete(operationPrevision.id)}"><img src="@{'/public/images/icons/brick_delete.png'}" alt="delete"/></a>
-			<span style="background-color: ${operationPrevision.tag.color}" class="operationTag">${operationPrevision.tag.name}</span>
+			<span style="background-color: ${operationPrevision.tag.color}" class="operationTag">
+			${operationPrevision.tag.name}</span>
+			#{if (operationPrevision.tag.name!=operationPrevision.name)}
+			<br/><em>${operationPrevision.name}</em>
+			#{/if}
+			
 			
 		</td>
 			
