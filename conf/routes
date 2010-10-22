@@ -14,6 +14,8 @@ GET     /public/                                staticDir:public
 *		/bank/{id}/from{beginDate}/to{endDate} Banks.show
 *       /bank/{id}                  Banks.show
 
+*		/remote/bank/{id}			Banks.showJSON(format:'json')
+
 
 
 *       /{controller}/{action}                  {controller}.{action}

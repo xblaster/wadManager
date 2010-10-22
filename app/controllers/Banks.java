@@ -45,6 +45,14 @@ public class Banks extends AuthController{
 		render();
 	}
 	
+	public static void showJSON(Long id) {
+		BankAccount bankAccount = BankAccount.findById(id);
+		List<Operation> operations = null;
+		operations = Operation.find("bankAccount = ?",bankAccount).fetch();
+		
+		renderJSON(operations);
+	}
+	
 	public static void show(Long id, String beginDate, String endDate) {
 		//prepare date
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");

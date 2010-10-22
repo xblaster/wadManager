@@ -2,14 +2,18 @@ package services;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import models.BankAccount;
 import models.Operation;
 import models.OperationPrevision;
 import models.Tag;
+import models.TagStatValueObject;
 import models.User;
 import controllers.Application;
 
@@ -32,7 +36,11 @@ public class BankAccountServiceImpl implements BankAccountService {
 	}
 
 	public void deleteOperation(Long id) {
+		/*
 		Operation.findById(id).delete();
+		*/
+		Operation op = Operation.findById(id);
+		op.delete();
 	}
 
 	public Operation getOperationById(Long id) {
@@ -105,6 +113,41 @@ public class BankAccountServiceImpl implements BankAccountService {
 		}
 		return result;
 	}
+	
+	public Map<Tag, TagStatValueObject>getAllStatForBankAccount(BankAccount ba) {
+		List<Tag> tags = Tag.find("byUser",Application.getAuthUser()).fetch();
+		
+		Map<Tag, TagStatValueObject> res = new TreeMap<Tag, TagStatValueObject>();
+		
+		for (Tag tag : tags) {
+			System.out.println("stat for "+tag);
+			res.put(tag, getStatForTag(tag, ba));
+		}
+		return res;
+	}
+	
+	public TagStatValueObject getStatForTag(Tag t, BankAccount ba) {
+		TagStatValueObject res = new TagStatValueObject();
+		
+		Calendar cal = Calendar.getInstance();
+		
+		Date today = cal.getTime();
+		
+		//int year = cal.get(Calendar.YEAR);
+		cal.set(2010, 1, 1);
+		
+		while (cal.getTime().compareTo(today)<0)  {
+			Date dateBegin = cal.getTime();
+			cal.add(Calendar.MONTH, 1);
+			Date dateEnd = cal.getTime();
+			BigDecimal budget = calculateBudgetForTag(ba, dateBegin, dateEnd, t);
+			System.out.println("add "+dateBegin+" "+budget);
+			res.addValue(dateBegin, budget);
+		}
+		
+		return res;
+		
+	}
 
 	@Override
 	public Collection<OperationPrevision> getAllOperationPrevisions(Date begin,
@@ -131,6 +174,8 @@ public class BankAccountServiceImpl implements BankAccountService {
 	public void saveOperationPrevision(OperationPrevision op) {
 		op.save();
 	}
+
+
 	
 	
 }

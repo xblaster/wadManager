@@ -1,0 +1,25 @@
+#{extends 'default.html' /}
+<h1>Stat</h1>
+
+
+#{list items:stats.entrySet(), as:'entry'}
+	<!--  list count -->
+	<h1>${entry.getKey().name}</h1>
+
+	#{list items:entry.getValue().entrySet(), as:'tag_entry'}
+		<!--  list tags -->
+		<h2>${tag_entry.getKey().name}</h2>
+	
+		<table style="border: 1px solid #CCC">
+			#{list items:tag_entry.getValue().getStatMap().entrySet(), as:'stat_entry'}
+			<tr>
+				<td>${stat_entry.getKey().format("MM/yyyy")}</td>
+				<td style="text-align:right">${stat_entry.getValue().format("####0.00")}</td>
+			</tr>	
+			#{/list}
+		</table>
+		<p>Moyenne: ${tag_entry.getValue().getMoyenne().format("####0.00")}</p>
+		<p>Ecart type: ${tag_entry.getValue().getEcartType().format("####0.00")}</p>
+	#{/list}
+
+#{/list}

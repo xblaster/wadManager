@@ -171,7 +171,7 @@
 	<td>Let</td>
 </thead>
 	#{list items:operationPrevisions, as:'operationPrevision'}
-	<tr #{if (Math.abs(operationPrevision.amount) < Math.abs(budgets[operationPrevision.tag]))} class="error" #{/if}>
+	<tr #{if (Math.abs((float)operationPrevision.amount) < Math.abs((float)budgets[operationPrevision.tag]))} class="error" #{/if}>
 		<td>
 			<a href="@{OperationCtrl.editPrevision(operationPrevision.id)}"><img src="@{'/public/images/icons/brick_edit.png'}" alt="edit"/></a>
 			<a href="@{PrevisionCtrl.delete(operationPrevision.id)}"><img src="@{'/public/images/icons/brick_delete.png'}" alt="delete"/></a>

@@ -16,9 +16,9 @@ public class User extends Model{
 	public String email;
 	public String language;
 	
-	@OrderBy("name ASC")
-	@OneToMany
-	public List<BankAccount> bankAccounts;
+	//@OrderBy("name ASC")
+	//@OneToMany
+	//public List<BankAccount> bankAccounts;
 	
 	@OneToMany
 	public List<Tag> tags;

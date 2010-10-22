@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import play.db.jpa.Model;
 
@@ -11,6 +12,7 @@ import models.BankAccount;
 import models.Operation;
 import models.OperationPrevision;
 import models.Tag;
+import models.TagStatValueObject;
 import models.User;
 
 public interface BankAccountService {
@@ -46,4 +48,7 @@ public interface BankAccountService {
 	public void saveOperationPrevision(OperationPrevision op);
 	public OperationPrevision getOperationPrevisionById(Long id);
 	public BankAccount getByOperationPrevision(OperationPrevision op);
+	
+	public TagStatValueObject getStatForTag(Tag t, BankAccount ba);
+	public Map<Tag, TagStatValueObject>getAllStatForBankAccount(BankAccount ba);
 }
