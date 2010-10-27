@@ -115,10 +115,13 @@ public class Banks extends AuthController{
 		//fetch all budget
 		
 		Map<Tag, Double> budgets = new TreeMap<Tag, Double>(); 
+		Map<Tag, Double> estimations = new TreeMap<Tag, Double>();
 		for (Tag t : userService.getAllTags()) {
 			Double l = 0d;
+			Double est = 0d;
 			try {
 				l = Double.valueOf(bankAccountService.calculateBudgetForTag(bankAccount, dateFormat.parse(beginDate), dateFormat.parse(endDate), t).toString());
+				est = bankAccountService.calculateEstimation(bankAccount, t).doubleValue();
 			} catch (NumberFormatException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -128,9 +131,11 @@ public class Banks extends AuthController{
 			}
 			
 			budgets.put(t, l);
+			estimations.put(t, est);
 			//budgets.put(t, 3l);
 		}
 		renderArgs.put("budgets", budgets);
+		renderArgs.put("estimations", estimations);
 		
 		//////////////////////////////////////////////////////////
 		//feth all operationPrevisions

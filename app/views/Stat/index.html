@@ -18,6 +18,9 @@
 			</tr>	
 			#{/list}
 		</table>
+		
+		${chart.nonStaticgenerateBudgetBarImg(tag_entry.getValue()).raw()}
+		
 		<p>Moyenne: ${tag_entry.getValue().getMoyenne().format("####0.00")}</p>
 		<p>Ecart type: ${tag_entry.getValue().getEcartType().format("####0.00")}</p>
 	#{/list}

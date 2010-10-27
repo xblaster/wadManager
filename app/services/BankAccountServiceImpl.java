@@ -84,6 +84,12 @@ public class BankAccountServiceImpl implements BankAccountService {
 		return result;
 	}
 	
+	public BigDecimal calculateEstimation(BankAccount ba, Tag ta) {
+		TagStatValueObject stat = getStatForTag(ta, ba);
+		
+		return stat.getMajoredEstimation();
+	}
+	
 	public BigDecimal calculateBudgetForTag(BankAccount ba, Date dateBegin, Date dateEnd, Tag ta) {
 		List<Operation> operations = 
 					/*Operation.find("select distinct op from Operation op " +
@@ -120,7 +126,7 @@ public class BankAccountServiceImpl implements BankAccountService {
 		Map<Tag, TagStatValueObject> res = new TreeMap<Tag, TagStatValueObject>();
 		
 		for (Tag tag : tags) {
-			System.out.println("stat for "+tag);
+			//System.out.println("stat for "+tag);
 			res.put(tag, getStatForTag(tag, ba));
 		}
 		return res;
@@ -141,7 +147,7 @@ public class BankAccountServiceImpl implements BankAccountService {
 			cal.add(Calendar.MONTH, 1);
 			Date dateEnd = cal.getTime();
 			BigDecimal budget = calculateBudgetForTag(ba, dateBegin, dateEnd, t);
-			System.out.println("add "+dateBegin+" "+budget);
+			//System.out.println("add "+dateBegin+" "+budget);
 			res.addValue(dateBegin, budget);
 		}
 		

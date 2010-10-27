@@ -11,7 +11,7 @@ import play.data.validation.Required;
 import play.db.jpa.Model;
 
 @Entity
-public class BankAccount extends Model {
+public class BankAccount extends Model implements Comparable {
 
 	@Required
 	public String name;
@@ -31,4 +31,13 @@ public class BankAccount extends Model {
 	
 	@OneToMany(fetch = FetchType.EAGER)
 	public List<Operation> operations;
+
+	@Override
+	public int compareTo(Object arg0) {
+		if (arg0 instanceof BankAccount) {
+			BankAccount ba = (BankAccount) arg0;
+			return name.compareTo(ba.name);
+		}
+		return 1;
+	}
 }

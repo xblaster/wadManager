@@ -1,6 +1,7 @@
 package models;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
 import java.util.Date;
 import java.util.Map;
 import java.util.TreeMap;
@@ -26,12 +27,27 @@ public class TagStatValueObject {
 	}
 
 
+	public int getNonZeroElt() {
+		int nonZeroElt = 0;
+		for (BigDecimal val: values.values()) {
+			if (Math.abs(val.doubleValue()) > 0) {
+				nonZeroElt++;
+			}
+		}
+		return nonZeroElt;
+	}
+	
 	public BigDecimal getMoyenne() {
 		BigDecimal v = BigDecimal.valueOf(0);
 		for (BigDecimal val: values.values()) {
 			v =v.add(val);
 		}
-		return BigDecimal.valueOf(v.doubleValue()/values.size()); 
+		int nonZeroElt = getNonZeroElt();
+		//avoid divizion by zero
+		if (nonZeroElt==0) {
+			return BigDecimal.valueOf(0);
+		}
+		return BigDecimal.valueOf(v.doubleValue()/nonZeroElt); 
 	}
 	
 	public Double getEcartType() {
@@ -39,12 +55,31 @@ public class TagStatValueObject {
 		Double moyenne = getMoyenne().doubleValue();
 				
 		for (BigDecimal val: values.values()) {
-			sum = (val.doubleValue()-moyenne)*(val.doubleValue()-moyenne);
+			//only non zero value
+			if (Math.abs(val.doubleValue()) > 0) {
+				sum = (val.doubleValue()-moyenne)*(val.doubleValue()-moyenne);
+			}
 		}
 		
-		sum = sum/values.size();
+		int nonZeroElt = getNonZeroElt();
+		if (nonZeroElt==0) {
+			return 0d;
+		}
+
+		sum = sum/nonZeroElt;
 		
 		return new Double(Math.sqrt(sum)); 
+	}
+
+	public BigDecimal getMajoredEstimation() {
+		BigDecimal moyenne = BigDecimal.valueOf(getMoyenne().intValue());
+		Double ecartType = Double.valueOf(getEcartType().intValue());
+		
+		if (moyenne.doubleValue() > 0) {
+			return moyenne.add(BigDecimal.valueOf(2*ecartType));
+		} else {
+			return moyenne.add(BigDecimal.valueOf(-2*ecartType));
+		}
 	}
 	
 		

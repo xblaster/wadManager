@@ -222,6 +222,7 @@
 <thead>
 	<td>TagName</td>
 	<td>Budget</td>
+	<td>Estimation</td>
 </thead>
 	#{list items:tags, as:'tag'}
 	<tr>
@@ -234,10 +235,13 @@
 				<img src="@{'/public/images/icons/date_next.png'}" alt="delete"/></a>
 			</a>
 				${budgets[tag]}
+		</td>
 		
-			
-					
-			
+		<td>
+			<a href="@{PrevisionCtrl.add(tag.name, tag.id, bankAccount.id , estimations[tag], "01-"+(month+1)+"-"+year)}">
+				<img src="@{'/public/images/icons/date_next.png'}" alt="delete"/></a>
+			</a>
+				${estimations[tag]}
 		</td>
 	</tr>		
 	#{/list}

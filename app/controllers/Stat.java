@@ -13,6 +13,7 @@ import models.TagStatValueObject;
 import models.User;
 
 import services.BankAccountService;
+import util.Chart;
 import common.AuthController;
 
 public class Stat extends AuthController {
@@ -31,7 +32,7 @@ public class Stat extends AuthController {
 			stats.put(ba, res);
 		}
 		
-		
+		renderArgs.put("chart", new Chart());
 		renderArgs.put("stats", stats);
 		
 		render();

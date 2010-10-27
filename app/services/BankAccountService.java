@@ -40,6 +40,7 @@ public interface BankAccountService {
 	public boolean operationExists(Operation op);
 	
 	public BigDecimal calculateBudgetForTag(BankAccount ba, Date dateBegin, Date dateEnd, Tag ta);
+	public BigDecimal calculateEstimation(BankAccount ba, Tag ta);
 	
 	/**
 	 * operation previsions part
