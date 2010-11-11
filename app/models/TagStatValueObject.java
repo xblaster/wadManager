@@ -57,7 +57,7 @@ public class TagStatValueObject {
 		for (BigDecimal val: values.values()) {
 			//only non zero value
 			if (Math.abs(val.doubleValue()) > 0) {
-				sum = (val.doubleValue()-moyenne)*(val.doubleValue()-moyenne);
+				sum += (val.doubleValue()-moyenne)*(val.doubleValue()-moyenne);
 			}
 		}
 		
@@ -76,9 +76,9 @@ public class TagStatValueObject {
 		Double ecartType = Double.valueOf(getEcartType().intValue());
 		
 		if (moyenne.doubleValue() > 0) {
-			return moyenne.add(BigDecimal.valueOf(2*ecartType));
+			return moyenne.add(BigDecimal.valueOf(1*ecartType));
 		} else {
-			return moyenne.add(BigDecimal.valueOf(-2*ecartType));
+			return moyenne.add(BigDecimal.valueOf(-1*ecartType));
 		}
 	}
 	

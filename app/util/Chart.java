@@ -58,8 +58,8 @@ public class Chart {
 		String chart_src = "http://chart.apis.google.com/chart?cht=bvs&chs=600x225&chd=t:"
 			+implode(",",values)
 			+"&chm=h,999999,0,"+convertToChm(Math.abs(tagSatObj.getMoyenne().doubleValue()))+",2"
-			+"|h,CCCCCC,0,"+convertToChm(Math.abs(tagSatObj.getMoyenne().doubleValue()+2*tagSatObj.getEcartType()))+",1"
-			+"|h,CCCCCC,0,"+convertToChm(Math.abs(tagSatObj.getMoyenne().doubleValue()-2*tagSatObj.getEcartType()))+",1"
+			+"|h,CCCCCC,0,"+convertToChm(Math.abs(tagSatObj.getMoyenne().doubleValue()+1*tagSatObj.getEcartType()))+",1"
+			+"|h,CCCCCC,0,"+convertToChm(Math.abs(tagSatObj.getMoyenne().doubleValue()-1*tagSatObj.getEcartType()))+",1"
 			+"&chxl=0:|"+implode("|",labels);//+"&chco=999999";
 		
 		String res = "<img src=\""+chart_src+"\"/>";
