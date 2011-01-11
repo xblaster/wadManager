@@ -1,0 +1,9 @@
+#{extends 'default.html' /}
+
+<h2>Operations</h2>
+
+<ul>
+#{list items:operations, as:'operation'}
+<li>${operation.name}</li>
+#{/list}
+</ul>
