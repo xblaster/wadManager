@@ -46,6 +46,10 @@ h1 {
 	opacity:0.4;
 }
 
+.needCheck {
+	background-color: #7de1c3;
+}
+
 .comment {
 	color: #AAA;
 	font-size: 80%;

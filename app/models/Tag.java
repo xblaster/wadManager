@@ -13,6 +13,7 @@ import play.db.jpa.Model;
 public class Tag extends Model implements Comparable<Tag>{
 	public String name;
 	public String color;
+	public boolean visible = true;
 	
 	public String toString() {
 		return name;

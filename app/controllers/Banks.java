@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
@@ -226,12 +227,20 @@ public class Banks extends AuthController{
 		bankAccountService.deleteOperation(id);
 	}
 	
-	public static void addOperation(String name, Date date, Double amount, Long bankId) {
+	public static void addOperation(String name, String date, Double amount, Long bankId) {
 		
 		Operation operation = new Operation();
 		operation.name = name;
 		operation.amount = amount;
-		operation.date = date;
+		
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+		
+		try {
+			operation.date = simpleDateFormat.parse(date);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		operation.bankAccount = BankAccount.findById(bankId);
 		
@@ -304,40 +313,36 @@ public class Banks extends AuthController{
 					
 					op.name = op.name.replace("([ ])*DU ([ 0-9])*" , "");
 					op.name = op.name.replace("FACTURE CARTE" , "");
-					
+					op.tags.add(tagService.getOrCreateByName("needCheck"));
 					
 					if (op.name.contains("DAB")) {
 						op.tags.add(tagService.getOrCreateByName("DAB"));
+						
 					}
 					
 					if (op.name.contains("PRELEVEMENT")) {
 						Tag t = tagService.getOrCreateByName("PREL");
 						op.name = op.name.replace("PRELEVEMENT ", "");
 						op.tags.add(t);
+						//remove check for PREL
+						op.tags.remove(tagService.getOrCreateByName("needCheck"));
 					}
 					
 					if (op.name.contains("ECHEANCE")) {
 						Tag t = tagService.getOrCreateByName("PREL");
+						
+						//remove check for ECHEANCE
+						op.tags.remove(tagService.getOrCreateByName("needCheck"));
 						op.tags.add(t);
 					}
 					
 					//course
-					if (op.name.contains("LECLER")) {
-						op.tags.add(tagService.getOrCreateByName("COURSE"));
+					for (String s : Arrays.asList("LECLER","CARREFOUR",
+								"INTERMARCHE","CORA","NORMA")) {
+						if (op.name.contains(s)) {
+							op.tags.add(tagService.getOrCreateByName("COURSE"));
+						}
 					}
-					if (op.name.contains("CARREFOUR")) {
-						op.tags.add(tagService.getOrCreateByName("COURSE"));
-					}
-					if (op.name.contains("INTERMARCHE")) {
-						op.tags.add(tagService.getOrCreateByName("COURSE"));
-					}
-					
-					if (op.name.contains("CORA")) {
-						op.tags.add(tagService.getOrCreateByName("COURSE"));
-					}
-					
-					//op.save();
-					
 					bankAccountService.saveOperation(op);
 					
 				}
@@ -371,8 +376,6 @@ public class Banks extends AuthController{
 			Operation op = bankAccountService.getOperationById(l);
 			
 			if (jsAction.equals("addTag")) {
-				
-				System.out.println("change");
 				op.tags.add(tagService.getOrCreateByName(jsParam));
 				bankAccountService.saveOperation(op);
 			} else if (jsAction.equals("delTag")) {

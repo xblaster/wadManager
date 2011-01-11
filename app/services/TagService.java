@@ -29,15 +29,26 @@ public class TagService {
 	}
 	
 	public Tag getOrCreateByName(String name) {
-		Tag t = Tag.find("name = ? and user = ?",name, Application.getAuthUser()).first();
+		
+		Tag t = getByName(name);
 		if (t==null) {
 			t = new Tag();
 			t.name = name;
 			t.user = Application.getAuthUser();
 			t.color = getRandomColor();
+			
+			//invisible tag
+			if (name == "needCheck") {
+				t.visible = false;
+			}
+			
 			t.save();
 		}
 		
 		return t;
+	}
+	
+	public Tag getByName(String name) {
+		return Tag.find("name = ? and user = ?",name, Application.getAuthUser()).first();
 	}
 }

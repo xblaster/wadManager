@@ -26,13 +26,17 @@
 	</tr>
 
 #{list items:_operations, as:'operation'}
-	<tr #{if operation.fictive == true} class="fictive" #{/if}>
+	<tr #{if operation.fictive == true} class="fictive" #{/if}#{if operation.hasTag("needCheck")} class="needCheck" #{/if}>
 	<td><input type="checkbox" name="selected" value="${operation.id}"/></td>
 	<td>${operation.date.format("dd/MM/yyyy")} <em>(${operation.date.since()})</em></td>
 	<td>
 		
 		#{list items:operation.tags, as:'tag'}
-			<span style="background-color: ${tag.color}" class="operationTag">${tag.name}</span>
+			#{if tag.visible}
+				<span style="background-color: ${tag.color}" class="operationTag">${tag.name}</span>
+			#{/if}
+			
+			
 		#{/list}
 		
 		${operation.name}
