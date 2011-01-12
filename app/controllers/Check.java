@@ -19,4 +19,10 @@ public class Check extends AuthController  {
 		 renderArgs.put("operations", checkService.getUncheckedByPrice(Double.valueOf(price))); 
 		 render();
 	 }
+	 
+	 public static void uncheck(Long key) {
+		 checkService.uncheck(key);
+		 flash.success("uncheck OK");
+		 index();
+	 }
 }

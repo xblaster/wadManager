@@ -4,6 +4,9 @@
 
 <ul>
 #{list items:operations, as:'operation'}
-<li>${operation.name}</li>
+<li>
+${operation.date.format("dd/MM/yyyy")} | ${operation.name} | ${operation.amount}
+[<a href="@{uncheck(operation.id)}">x</a>]
+</li>
 #{/list}
 </ul>
