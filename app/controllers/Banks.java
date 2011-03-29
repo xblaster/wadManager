@@ -385,7 +385,5 @@ public class Banks extends AuthController{
 				bankAccountService.deleteOperation(l);
 			}
 		}
-	}
-	
-	
+	}	
 }
