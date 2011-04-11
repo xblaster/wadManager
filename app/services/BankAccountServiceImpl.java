@@ -155,7 +155,6 @@ public class BankAccountServiceImpl implements BankAccountService {
 		
 	}
 
-	@Override
 	public Collection<OperationPrevision> getAllOperationPrevisions(Date begin,
 			Date end) {
 		Collection <OperationPrevision> result = OperationPrevision.find("date >= ? and date < ?",begin, end).fetch();
