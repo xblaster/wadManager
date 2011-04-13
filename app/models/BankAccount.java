@@ -32,7 +32,6 @@ public class BankAccount extends Model implements Comparable {
 	@OneToMany(fetch = FetchType.EAGER)
 	public List<Operation> operations;
 
-	@Override
 	public int compareTo(Object arg0) {
 		if (arg0 instanceof BankAccount) {
 			BankAccount ba = (BankAccount) arg0;

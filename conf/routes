@@ -12,10 +12,11 @@ GET     /public/                                staticDir:public
 
 # Catch all
 *		/bank/{id}/from{beginDate}/to{endDate} Banks.show
+*		/bank/{id}/from{beginDate}/to{endDate}/xls Banks.showXLS
 *       /bank/{id}                  Banks.show
-
 *		/remote/bank/{id}			Banks.showJSON(format:'json')
 
+* 		/json/bank/{id}				Banks.jsonShow
 
 
 *       /{controller}/{action}                  {controller}.{action}

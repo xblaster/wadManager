@@ -1,5 +1,7 @@
 package controllers;
 
+import static play.modules.excel.Excel.renderExcel;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -11,6 +13,8 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -199,6 +203,182 @@ public class Banks extends AuthController{
 		render();
 	}
 	
+	
+	public static void showXLS(Long id, String beginDate, String endDate) {
+		//prepare date
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+		Calendar cal = Calendar.getInstance();
+		
+		if (endDate == null) {
+			
+			if (beginDate == null) {
+			
+				int month = cal.get(Calendar.MONTH);
+				int year = cal.get(Calendar.YEAR);
+				cal.set(year, month, 1);
+			
+				beginDate = dateFormat.format(cal.getTime());
+			} else {
+				try {
+					cal.setTime(dateFormat.parse(beginDate));
+				} catch (ParseException e) {
+					flash.error("Your interval seems to be corrupted");
+					show(id, null, null);
+				}
+			}
+			cal.add(Calendar.MONTH, 1);
+			endDate = dateFormat.format(cal.getTime());
+			
+			show(id, beginDate, endDate);
+		}
+		
+		Date origDate = null; 
+		
+		try {
+			origDate = dateFormat.parse(beginDate);
+			cal.setTime(origDate);
+		} catch (ParseException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		renderArgs.put("year", cal.get(Calendar.YEAR));
+		renderArgs.put("month", cal.get(Calendar.MONTH)+1);
+		
+		
+		renderArgs.put("beginDate", beginDate);
+		renderArgs.put("endDate", endDate);
+		
+		//retrieve bank account
+		BankAccount bankAccount = BankAccount.findById(id);
+
+		
+		List<Operation> operations = null;
+		try {
+			operations = Operation.find("bankAccount = ? and (date >= ? and date < ? )order by date ASC", bankAccount, dateFormat.parse(beginDate), dateFormat.parse(endDate)).fetch();
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		renderArgs.put("bankAccount", bankAccount);
+		renderArgs.put("operations", operations);
+		
+		//fetch all budget
+		
+		Map<Tag, Double> budgets = new TreeMap<Tag, Double>(); 
+		Map<Tag, Double> estimations = new TreeMap<Tag, Double>();
+		for (Tag t : userService.getAllTags()) {
+			Double l = 0d;
+			Double est = 0d;
+			try {
+				l = Double.valueOf(bankAccountService.calculateBudgetForTag(bankAccount, dateFormat.parse(beginDate), dateFormat.parse(endDate), t).toString());
+				est = bankAccountService.calculateEstimation(bankAccount, t).doubleValue();
+			} catch (NumberFormatException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			budgets.put(t, l);
+			estimations.put(t, est);
+			//budgets.put(t, 3l);
+		}
+		renderArgs.put("budgets", budgets);
+		renderArgs.put("estimations", estimations);
+		
+		//////////////////////////////////////////////////////////
+		//feth all operationPrevisions
+		
+		Collection<OperationPrevision> operationPrevisionsList = null; 
+		try {
+			operationPrevisionsList = bankAccountService.getAllOperationPrevisions(dateFormat.parse(beginDate), dateFormat.parse(endDate));
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		renderArgs.put("operationPrevisions", operationPrevisionsList);
+		
+		
+		
+		
+		
+		renderArgs.put("chartImg", Chart.generateBudgetChartImg(budgets));
+		
+		Double somme = Double.valueOf(bankAccountService.getAmountAt(bankAccount, origDate).toString());
+		renderArgs.put("initialSomme", somme);
+		
+		for (Operation op : operations ) {
+			//if it's not a fictive operation
+			if (op.fictive == false) {
+				somme+= op.amount;
+			}
+		}
+		
+		
+		
+		
+		
+		Double previsionSomme = somme;
+		//System.out.println("somme:"+ somme);
+		for (OperationPrevision op: operationPrevisionsList) {
+			Double tagBudget = 0d;
+			try {
+				tagBudget = Double.valueOf(bankAccountService.calculateBudgetForTag(bankAccount, dateFormat.parse(beginDate), dateFormat.parse(endDate), op.tag).toString());
+			} catch (NumberFormatException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			if (Math.abs(tagBudget)<Math.abs(op.amount)) {
+				previsionSomme += (op.amount - tagBudget);
+				//System.out.println(op.amount);
+				//System.out.println("-:"+ (op.amount + tagBudget));
+			}
+		}
+		
+		renderArgs.put("previsionSomme", previsionSomme);
+		
+		renderArgs.put("somme", somme);
+		renderArgs.put("tags", userService.getAllTags());
+		
+		renderArgs.put("fileName", "export.xls");
+		
+		List<HashMap<String,String>> formattedOperations = new LinkedList<HashMap<String,String>>();
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+		
+		for(Operation operation: operations) {
+			HashMap<String,String> entry = new HashMap<String, String>();
+			
+			StringBuilder tags = new StringBuilder("");
+			for(Tag t: operation.tags) {
+				if (t.visible) {
+					tags.append(t.name);
+					tags.append(", ");
+				}
+			}
+			
+			String tagStr = tags.toString();
+			
+			entry.put("name",operation.name.trim());
+			entry.put("date",sdf.format(operation.date));
+			entry.put("amount",operation.amount+"");
+			entry.put("tags",tagStr);
+			//entry.put("tags");
+			
+			formattedOperations.add(entry);
+		}
+		
+		renderArgs.put("formattedOperations", formattedOperations);
+		
+		renderExcel();
+	}
+	
 	/**
 	 * 
 	 * @param name
@@ -385,7 +565,5 @@ public class Banks extends AuthController{
 				bankAccountService.deleteOperation(l);
 			}
 		}
-	}
-	
-	
+	}	
 }
