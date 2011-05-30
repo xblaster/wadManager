@@ -10,7 +10,7 @@ import play.mvc.Controller;
 
 public class AuthController extends Controller {
 	
-	@Before(unless={"Login.login", "Login.authenticate","Login.refuse"})
+	@Before(unless={"Login.login", "Login.authenticate","Login.refuse","Banks.showJSON"})
 	static void checkAuthenticated() {
 	    if(!session.contains("user")) {
 	        Login.login();
