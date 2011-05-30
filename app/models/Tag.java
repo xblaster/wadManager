@@ -5,13 +5,14 @@ import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.swing.text.html.HTMLDocument.HTMLReader.IsindexAction;
 
 import play.db.jpa.Model;
 
+import com.google.gson.annotations.Expose;
+
 @Entity
 public class Tag extends Model implements Comparable<Tag>{
-	public String name;
+	@Expose public String name;
 	public String color;
 	public boolean visible = true;
 	
