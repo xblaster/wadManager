@@ -29,8 +29,8 @@ public class BankAccount extends Model implements Comparable {
 		return firstName+":"+name;
 	}
 	
-	@OneToMany(fetch = FetchType.EAGER)
-	public List<Operation> operations;
+	//@OneToMany(fetch = FetchType.EAGER)
+	//public List<Operation> operations;
 
 	public int compareTo(Object arg0) {
 		if (arg0 instanceof BankAccount) {

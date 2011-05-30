@@ -32,6 +32,7 @@ import services.UserService;
 import util.Chart;
 
 import common.AuthController;
+import common.RenderJsonWithExclusion;
 
 public class Banks extends AuthController{
 	
@@ -55,9 +56,13 @@ public class Banks extends AuthController{
 		List<Operation> operations = null;
 		operations = Operation.find("bankAccount = ?",bankAccount).fetch();
 		
-		renderJSON(operations);
+		renderJSONWithExclude(operations);
 	}
 	
+	private static void renderJSONWithExclude(List<Operation> operations) {
+		throw new RenderJsonWithExclusion(operations);		
+	}
+
 	public static void show(Long id, String beginDate, String endDate) {
 		//prepare date
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");

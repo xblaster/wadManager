@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.Set;
 import java.util.TreeSet;
 
-import javax.inject.Inject;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
@@ -13,19 +12,22 @@ import javax.persistence.ManyToOne;
 import play.db.jpa.Model;
 import services.TagService;
 
+import com.google.gson.annotations.Expose;
+
 @Entity
 public class Operation extends Model {
 
-	public String name;
+	
+	@Expose public String name;
 	public String importName;
 	
-	public String comment;
+	@Expose public String comment;
 	
-	public Date date;
+	@Expose public Date date;
 
-	public String description;
+	@Expose public String description;
 	
-	public double amount;
+	@Expose public double amount;
 	
 	public boolean fictive;
 	
@@ -38,7 +40,7 @@ public class Operation extends Model {
 	}
 	
 	@ManyToMany(cascade= CascadeType.PERSIST)
-	public Set<Tag> tags;
+	@Expose public Set<Tag> tags;
 	
 	public Operation() {
 		super();

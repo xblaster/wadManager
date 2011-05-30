@@ -9,10 +9,6 @@ import common.AuthController;
 public class Login extends AuthController {
 
 	public static void index() {
-	    //renderArgs.put("user", session.get("user"));
-	    //Map extension = (Map) Cache.get(session.getId()+"ext");
-	    //renderArgs.put("extension", );
-	    //System.out.println(session.get("extensions"));
 	    Application.index();
 	}
 	     
