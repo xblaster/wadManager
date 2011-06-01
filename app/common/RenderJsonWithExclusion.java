@@ -14,15 +14,21 @@ import com.google.gson.JsonSerializer;
 public class RenderJsonWithExclusion extends Result {
 	String json;
 
+	private GsonBuilder getGSonBuilder() {
+		return new GsonBuilder()
+		.excludeFieldsWithoutExposeAnnotation()
+		.setPrettyPrinting()
+		.setDateFormat("yyyy-MM-dd");
+	}
+	
 	public RenderJsonWithExclusion(Object o) {
-		GsonBuilder gson = new GsonBuilder()
-				.excludeFieldsWithoutExposeAnnotation();
+		GsonBuilder gson = getGSonBuilder();
 		json = gson.create().toJson(o);
 	}
 
 	public RenderJsonWithExclusion(Object o, JsonSerializer<?>... adapters) {
-		GsonBuilder gson = new GsonBuilder()
-				.excludeFieldsWithoutExposeAnnotation();
+		GsonBuilder gson = getGSonBuilder();
+		
 		for (Object adapter : adapters) {
 			Type t = getMethod(adapter.getClass(), "serialize")
 					.getParameterTypes()[0];
