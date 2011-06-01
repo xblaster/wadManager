@@ -15,6 +15,7 @@ GET     /public/                                staticDir:public
 *		/bank/{id}/from{beginDate}/to{endDate}/xls Banks.showXLS
 *       /bank/{id}                  Banks.show
 *		/remote/bank/{id}			Banks.showJSON(format:'json')
+*		/remote/bank/add/{id}			Banks.jsonAdd(format:'json')
 
 * 		/json/bank/{id}				Banks.jsonShow
 
