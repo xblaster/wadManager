@@ -54,9 +54,25 @@ public class Banks extends AuthController{
 	public static void showJSON(Long id) {
 		BankAccount bankAccount = BankAccount.findById(id);
 		List<Operation> operations = null;
-		operations = Operation.find("bankAccount = ?",bankAccount).fetch();
+		operations = Operation.find("bankAccount = ? order by date DESC",bankAccount).fetch(30);
 		
 		renderJSONWithExclude(operations);
+	}
+	
+	public static void jsonAdd(Long id, Long amount, String name) {
+		Operation operation = new Operation();
+		operation.name = name;
+		operation.amount = amount;
+		operation.fictive = true;
+		
+		operation.date = new Date();
+		
+		operation.bankAccount = BankAccount.findById(id);
+		
+		bankAccountService.saveOperation(operation);
+		
+		renderText("ok");
+		//flash.success("Operation %s created", name);
 	}
 	
 	private static void renderJSONWithExclude(List<Operation> operations) {
