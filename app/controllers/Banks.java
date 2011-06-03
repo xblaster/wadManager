@@ -68,6 +68,7 @@ public class Banks extends AuthController{
 		operation.date = new Date();
 		
 		operation.bankAccount = BankAccount.findById(id);
+		operation.tags.add(tagService.getOrCreateByName("liquide"));
 		
 		bankAccountService.saveOperation(operation);
 		
