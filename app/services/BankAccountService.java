@@ -52,5 +52,6 @@ public interface BankAccountService {
 	
 	public TagStatValueObject getStatForTag(Tag t, BankAccount ba);
 	public Map<Tag, TagStatValueObject>getAllStatForBankAccount(BankAccount ba);
+	int fixBadTag();
 	
 }
