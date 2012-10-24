@@ -114,24 +114,32 @@
 <div class="span-24 last">
 	<form action="@{addOperation()}" method="POST">
 	
-	<div class="span-5 colborder">
+	<div class="span-4 colborder">
 		<p>
 		    <label for="name">Name of your operation</label><br/>
 		    <input type="text" name="name" id="name" value="" />
 		</p>
 	</div>
-	<div class="span-5 colborder">
+	<div class="span-4 colborder">
 	<p> 
-	    <label for="name">Date of your operation</label><br/>
+	    <label for="date">Date of your operation</label><br/>
 	    <input class="date" type="text" name="date" id="date" value="" />
 	 </p>
 	 </div>
-	 <div class="span-5 colborder">
+	 <div class="span-4 colborder">
 	 <p>
-	    <label for="name">Amount of your operation</label><br/>
+	    <label for="amount">Amount of your operation</label><br/>
 	    <input type="text" name="amount" id="amount" value="" /> &euro;
 	 </p>
 	 </div>
+	 
+	  <div class="span-4 colborder">
+	 <p>
+	    <label for="fictive">Fictive operation</label><br/>
+	    <input type="checkbox" name="fictive" id="fictive" value="FICT" />
+	 </p>
+	 </div>
+	 
 	 <div class="span-5">
 	 <p>   
 	    <input type="hidden" name="bankId" id="bankId" value="${bankAccount.id}" />

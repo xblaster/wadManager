@@ -179,6 +179,45 @@ public class BankAccountServiceImpl implements BankAccountService {
 	public void saveOperationPrevision(OperationPrevision op) {
 		op.save();
 	}
+	
+	//need to remove after fix
+	@Override
+	public int fixBadTag() {
+		List<Tag> tags = Tag.findAll();
+		
+		int fixed = 0;
+		
+		for (Tag tag : tags) {
+			if (tag.user == null) {
+				fixThisTag(tag);
+				//tag.delete();
+				fixed++;
+			}
+		}
+		
+		
+		return fixed;
+	}
+
+	private void fixThisTag(Tag tag) {
+		TagService ts = new TagService();
+		Tag realTag = ts.getOrCreateByName(tag.name);
+		
+		List<Operation> operations = Operation.find("select op from Operation op " +
+				"		join op.tags as t" +
+				"		where "+
+				"       t in (:tag)")
+				.bind("tag", tag).fetch();
+		
+		
+		
+		for (Operation op : operations) {
+			op.tags.remove(tag);
+			op.tags.add(realTag);
+			op.save();
+		}
+		
+	}
 
 
 	
