@@ -1,0 +1,16 @@
+{
+  "name": "public",
+  "version": "0.0.0",
+  "homepage": "https://github.com/xblaster/wadManager",
+  "authors": [
+    "Jérôme Wax <nospam@lo2k.net>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
