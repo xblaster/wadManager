@@ -4,7 +4,7 @@
     <head>
         <title>#{get 'title' /} - wadManager</title>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-        <link rel="stylesheet" type="text/css" media="screen" href="@{'/public/stylesheets/blueprint/screen.css'}">
+        <link rel="stylesheet" type="text/css" media="screen" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
         <link rel="stylesheet" type="text/css" media="screen" href="@{'/public/stylesheets/lo2k.css'}">
         <link rel="stylesheet" type="text/css" media="screen" href="@{'/public/stylesheets/ui-darkness/jquery-ui-1.8.1.custom.css'}">
         <link rel="stylesheet" type="text/css" media="screen" href="@{'/public/stylesheets/colorPicker/css/colorpicker.css'}">
@@ -15,22 +15,55 @@
         <script src="@{'/public/javascripts/jquery-ui-1.8.1.custom.min.js'}" type="text/javascript" charset="utf-8"></script>
         <script src="@{'/public/javascripts/jquery.jeditable.mini.js'}" type="text/javascript" charset="utf-8"></script>
         <script src="@{'/public/javascripts/colorPicker/colorpicker.js'}" type="text/javascript" charset="utf-8"></script>
+
+        <script src="@{'/public/javascripts/jquery-1.4.2.min.js'}" type="text/javascript" charset="utf-8"></script>
+        <script src="@{'/public/bower_components/angular/angular.js'}" type="text/javascript" charset="utf-8"></script>
+        <script src="@{'/public/bower_components/angular-route/angular-route.js'}" type="text/javascript" charset="utf-8"></script>
+
+        <script src="@{'/public/javascripts/app.js'}" type="text/javascript" charset="utf-8"></script>
+        <script src="@{'/public/javascripts/controllers/main.js'}" type="text/javascript" charset="utf-8"></script>
         
         
         #{get 'moreScripts' /}
     </head>
     <body>
-    	<div class="container black">
+    	<div class="navbar navbar-default navbar-fixed-top">
     		#{if authenticated}
-				<span style="float:right">
-					${user} <a href="@{Login.disconnect()}" class="btn">Disconnect</a>
-				</span>
-			#{/if}
-    	
-    	<h1>WadManager</h1>
+                <ul class="nav navbar-nav navbar-right"     >
+                    <li>
+                        <div>
+                        ${user} <a href="@{Login.disconnect()}" class="btn btn-default btn-xs">Disconnect</a>
+                        </div>
+                    </li>
+			    </ul>
 
-	
-			
+			#{/if}
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">WadManager</a>
+            </div>
+
+                <ul class="nav navbar-nav">
+                    <li>
+                    <a href="@{Stat.index()}">Stats</a>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a href="@{Banks.index()}">Banks</a>
+                    </li>
+                </ul>
+            <ul class="nav navbar-nav">
+                <li>
+                    <a href="@{Check.index()}">Check</a>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav">
+                <li>
+                    <a href="@{Tools.index()}">Tools</a>
+                </li>
+            </ul>
+
+
 	    	
 	    	#{if flash.success}
 	    		<p class="success">${flash.success}</p>
@@ -42,11 +75,8 @@
 		</div>	
     
     	<div class="container">
-    	
-    	<a href="@{Stat.index()}">Stats</a>
-    	 | <a href="@{Banks.index()}">Banks</a>
-    	  | <a href="@{Check.index()}">Check</a> |
-    	  <a href="@{Tools.index()}">Tools</a> 
+
+
     	
     	<div class="span-24 last"> 
         	#{doLayout /}
