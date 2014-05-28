@@ -1,6 +1,5 @@
 package controllers;
 
-import static play.modules.excel.Excel.renderExcel;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -406,9 +405,9 @@ public class Banks extends AuthController {
 			formattedOperations.add(entry);
 		}
 
-		renderArgs.put("formattedOperations", formattedOperations);
-
-		renderExcel();
+		//renderArgs.put("formattedOperations", formattedOperations);
+        render();
+		//renderExcel();
 	}
 
 	/**
