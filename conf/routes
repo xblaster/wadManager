@@ -18,6 +18,7 @@ GET     /public/                                staticDir:public
 *		/remote/bank/add/{id}			Banks.jsonAdd(format:'json')
 
 * 		/json/bank/{id}				Banks.jsonShow
+* 		/json/bank/show/{id}				Banks.jsonBank(format:'json')
 
 
 *       /{controller}/{action}                  {controller}.{action}
